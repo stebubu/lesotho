@@ -244,7 +244,11 @@ def main():
         
             lon = st.select_slider('Select Longitude', options=selected_ensemble.lon.values)
             lat = st.select_slider('Select Latitude', options=selected_ensemble.lat.values)
-        
+
+            # Plotting a boxplot of the selected pixel across all ensembles
+            fig = px.box(pixel_values.to_dataframe().reset_index(), y="precipitation")
+
+            
             # Extracting values for the selected pixel across all ensembles
             pixel_values = forecast_djf_median_sums.sel(lon=lon, lat=lat, method="nearest")
             lower_tercile_value =lower_tercile.sel(lon=lon, lat=lat, method="nearest")
@@ -257,10 +261,13 @@ def main():
             fig.add_annotation(x=0.5, xref="paper", y=lower_tercile_value, text=f"Lower Tercile: {lower_tercile_value}",
                                showarrow=True, arrowhead=1, ax=0, ay=-40)
 
-            
+
+
+
+
+
         
-            # Plotting a boxplot of the selected pixel across all ensembles
-            fig = px.box(pixel_values.to_dataframe().reset_index(), y="precipitation")
+
             st.plotly_chart(fig, use_container_width=True)
 
 if __name__ == "__main__":
