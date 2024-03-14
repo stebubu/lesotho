@@ -214,8 +214,16 @@ def main():
             
             fig.update_traces(hoverinfo='x+y+z', showscale=True)
             st.plotly_chart(fig, use_container_width=True)            
-                        
+
+            # Plotting lower forecast_djf_median_sums with custom color scale
+            fig = px.imshow(forecast_djf_median_sums, 
+                            labels=dict(x="Longitude", y="Latitude", color="red"),
+                            x=forecast_djf_median_sums.lon,
+                            y=forecast_djf_median_sums.lat)
             
+            fig.update_traces(hoverinfo='x+y+z', showscale=True)
+            st.plotly_chart(fig, use_container_width=True)            
+                        
 
             # Step 5: Interactive year selection and plotting
             year = st.slider("Select a Year", int(historical_djf_sum.djf_year.min()), int(historical_djf_sum.djf_year.max()))
