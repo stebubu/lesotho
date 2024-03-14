@@ -16,10 +16,18 @@ def main():
     historical_file = st.file_uploader("Upload historical netCDF", type=["nc"])
     forecast_file = st.file_uploader("Upload forecast netCDF for 2023", type=["nc"])
 
+    if historical_file is not None:
+        # Write uploaded file to a temporary file and then load with xarray
+        with tempfile.NamedTemporaryFile(delete=False, suffix='.nc') as tmp:
+            tmp.write(historical_file.getvalue())
+            tmp.flush()  # Ensure all data is written
+            historical_data = xr.open_dataset(tmp.name)
+
+
     if historical_file and forecast_file:
         #historical_data = xr.open_dataset(historical_file)
         forecast_data = xr.open_dataset(forecast_file)
-        historical_data = xr.open_dataset(historical_file, engine='netcdf4')
+        #historical_data = xr.open_dataset(historical_file, engine='netcdf4')
 
         # Assuming 'precipitation' variable exists; adjust as necessary
         historical_precip_da = historical_data['precipitation']
