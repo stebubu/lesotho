@@ -206,7 +206,15 @@ def main():
             fig.update_traces(hoverinfo='x+y+z', showscale=True)
             st.plotly_chart(fig, use_container_width=True)            
             
-
+            # Plotting lower tercilet with custom color scale
+            fig = px.imshow(lower_tercile, 
+                            labels=dict(x="Longitude", y="Latitude", color="lower_tercile"),
+                            x=lower_tercile.lon,
+                            y=lower_tercile.lat)
+            
+            fig.update_traces(hoverinfo='x+y+z', showscale=True)
+            st.plotly_chart(fig, use_container_width=True)            
+                        
             
 
             # Step 5: Interactive year selection and plotting
