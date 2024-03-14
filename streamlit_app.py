@@ -201,8 +201,8 @@ def main():
             st.pyplot(fig)
             # Add more functionality as needed
             # Interactive Ensemble Selection
-            ens = st.slider("Select Ensemble", 0, 49)
-            selected_ensemble = forecast_djf_median_sums.sel(ensemble=ens)
+            #ens1 = st.slider("Select Ensemble", 0, 49)
+            #selected_ensemble = forecast_djf_median_sums.sel(ensemble=ens)
         
             # Plotting selected ensemble
             fig = px.imshow(selected_ensemble, 
