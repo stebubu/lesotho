@@ -185,6 +185,17 @@ def main():
             fig, ax = plt.subplots()
             below_normal_probability_forecast.plot(ax=ax, cmap=cmap, norm=norm)
             st.pyplot(fig)
+           
+            # Plotting below_normal_probability_forecast#####
+            fig = px.imshow(below_normal_probability_forecast, 
+                            labels=dict(x="Longitude", y="Latitude", color="Value"),
+                            x=below_normal_probability_forecast.lon,
+                            y=below_normal_probability_forecast.lat)
+            fig.update_traces(hoverinfo='x+y+z', showscale=True)
+            st.plotly_chart(fig, use_container_width=True)
+            
+
+            
 
             # Step 5: Interactive year selection and plotting
             year = st.slider("Select a Year", int(historical_djf_sum.djf_year.min()), int(historical_djf_sum.djf_year.max()))
