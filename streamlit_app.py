@@ -186,13 +186,25 @@ def main():
             below_normal_probability_forecast.plot(ax=ax, cmap=cmap, norm=norm)
             st.pyplot(fig)
            
-            # Plotting below_normal_probability_forecast#####
+            
+            # Assuming below_normal_probability_forecast is your dataset
+            # Create a custom color scale
+            custom_color_scale = [
+                [0, "red"],  # Values normalized to 0 will be red
+                [0.33, "red"],  # Up to 0.33, also red
+                [0.33, "green"],  # Values normalized exactly at 0.33 will be an abrupt change to green
+                [1, "green"]  # Up to the maximum normalized value (1), will be green
+            ]
+            
+            # Plotting below_normal_probability_forecast with custom color scale
             fig = px.imshow(below_normal_probability_forecast, 
-                            labels=dict(x="Longitude", y="Latitude", color="Value"),
+                            labels=dict(x="Longitude", y="Latitude", color="Probability"),
                             x=below_normal_probability_forecast.lon,
-                            y=below_normal_probability_forecast.lat)
+                            y=below_normal_probability_forecast.lat,
+                            color_continuous_scale=custom_color_scale)
+            
             fig.update_traces(hoverinfo='x+y+z', showscale=True)
-            st.plotly_chart(fig, use_container_width=True)
+            st.plotly_chart(fig, use_container_width=True)            
             
 
             
