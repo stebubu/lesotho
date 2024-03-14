@@ -35,8 +35,10 @@ def main():
     forecast_file = st.file_uploader("Upload forecast netCDF for 2023", type=["nc"])
 
 
-    if historical_file and forecast_file:
-        historical_data = load_netcdf(historical_file)
+    #if historical_file and forecast_file:
+    if historical_file is not None:
+        forecast_data = load_netcdf(historical_file)
+    if forecast_file is not None:
         forecast_data = load_netcdf(forecast_file)
         #historical_data = xr.open_dataset(historical_file, engine='netcdf4')
 
