@@ -191,6 +191,13 @@ def main():
             selected_year_data.plot(ax=ax)
             st.pyplot(fig)
 
+
+            # Step 6: Interactive year selection and plotting
+            ens = st.slider("Select Ensemble", int(0), int(49))
+            selected_ensemble = forecast_djf_median_sums.sel(ensemble=ens)
+            fig, ax = plt.subplots()
+            selected_ensemble.plot(ax=ax)
+            st.pyplot(fig)
             # Add more functionality as needed
 
 if __name__ == "__main__":
