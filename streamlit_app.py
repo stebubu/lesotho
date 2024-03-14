@@ -254,7 +254,8 @@ def main():
 
             
             lower_tercile_value =lower_tercile.sel(lon=lon, lat=lat, method="nearest")
-            print (lower_tercile_value)
+            
+            st.write("Historical data processed.",lower_tercile_value)
 
             # Add a horizontal line for the lower_tercile_value
             # Add a horizontal line for the lower_tercile_value with adjusted properties
