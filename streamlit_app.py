@@ -17,8 +17,9 @@ def main():
     forecast_file = st.file_uploader("Upload forecast netCDF for 2023", type=["nc"])
 
     if historical_file and forecast_file:
-        historical_data = xr.open_dataset(historical_file)
+        #historical_data = xr.open_dataset(historical_file)
         forecast_data = xr.open_dataset(forecast_file)
+        historical_data = xr.open_dataset(historical_file, engine='netcdf4')
 
         # Assuming 'precipitation' variable exists; adjust as necessary
         historical_precip_da = historical_data['precipitation']
