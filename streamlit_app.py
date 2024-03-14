@@ -129,6 +129,7 @@ def calculate_below_normal_probability_ensemble(forecast_djf_data, lower_tercile
 
 def main():
     st.title("Climate Data Analysis")
+    n_ensembles = 50
 
 
     # Step 1: Upload and process historical data
