@@ -256,9 +256,10 @@ def main():
             lower_tercile_value =lower_tercile.sel(lon=lon, lat=lat, method="nearest")
 
             # Add a horizontal line for the lower_tercile_value
-            fig.add_trace(go.Scatter(x=[''], y=[lower_tercile_value], mode="lines", name="Lower Tercile",
-                                     line=dict(color="red", dash='dash')))
-            
+            # Add a horizontal line for the lower_tercile_value with adjusted properties
+            fig.add_trace(go.Scatter(x=[0, 1], y=[lower_tercile_value, lower_tercile_value], mode="lines",
+                                     name="Lower Tercile", line=dict(color="FireBrick", width=4, dash='dash')))
+                 
             # Annotate the lower_tercile_value on the plot
             fig.add_annotation(x=0.5, xref="paper", y=lower_tercile_value, text=f"Lower Tercile: {lower_tercile_value}",
                                showarrow=True, arrowhead=1, ax=0, ay=-40)
@@ -267,6 +268,14 @@ def main():
             # Plotting a boxplot of the selected pixel across all ensembles
             fig = px.box(pixel_values.to_dataframe().reset_index(), y="precipitation")
 
+
+            # Optionally, adjust y-axis range to ensure the lower tercile line is within view
+            fig.update_yaxes(range=[min_value, max_value]) # Set min_value and max_value according to your data
+            
+            # Update layout to ensure the annotation is within the plot area
+            fig.update_layout(annotations=[dict(xref='paper', x=0.5, y=lower_tercile_value,
+                                                text=f"Lower Tercile: {lower_tercile_value}", showarrow=True,
+                                                arrowhead=1, ax=0, ay=-40, bgcolor="LightYellow")])
 
         
 
