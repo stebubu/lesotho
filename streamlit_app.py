@@ -269,9 +269,7 @@ def main():
             fig = px.box(pixel_values.to_dataframe().reset_index(), y="precipitation")
 
 
-            # Optionally, adjust y-axis range to ensure the lower tercile line is within view
-            fig.update_yaxes(range=[min_value, max_value]) # Set min_value and max_value according to your data
-            
+           
             # Update layout to ensure the annotation is within the plot area
             fig.update_layout(annotations=[dict(xref='paper', x=0.5, y=lower_tercile_value,
                                                 text=f"Lower Tercile: {lower_tercile_value}", showarrow=True,
