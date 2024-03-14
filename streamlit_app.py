@@ -6,6 +6,7 @@ import os
 import matplotlib.pyplot as plt
 from matplotlib.colors import ListedColormap, BoundaryNorm
 import tempfile
+import plotly.express as px
 
 def calculate_djf_sum(data_array):
     # Create a new 'year' coordinate for grouping, shifting December to the next year
@@ -199,6 +200,33 @@ def main():
             selected_ensemble.plot(ax=ax)
             st.pyplot(fig)
             # Add more functionality as needed
+            # Interactive Ensemble Selection
+            ens = st.slider("Select Ensemble", 0, 49)
+            selected_ensemble = forecast_djf_median_sums.sel(ensemble=ens)
+        
+            # Plotting selected ensemble
+            fig = px.imshow(selected_ensemble, 
+                            labels=dict(x="Longitude", y="Latitude", color="Value"),
+                            x=selected_ensemble.longitude,
+                            y=selected_ensemble.latitude)
+            fig.update_traces(hoverinfo='x+y+z', showscale=True)
+            st.plotly_chart(fig, use_container_width=True)
+        
+            # Interactive Click to display value and plot boxplot
+            # Note: Due to limitations in streamlit's direct integration with interactive clicks on plotly maps,
+            # the actual interaction to display values and plot a boxplot on click would need a different approach.
+            # Consider providing instructions to the user to select a specific longitude and latitude from dropdowns or sliders
+            # and then use those to plot the boxplot.
+        
+            lon = st.select_slider('Select Longitude', options=selected_ensemble.longitude.values)
+            lat = st.select_slider('Select Latitude', options=selected_ensemble.latitude.values)
+        
+            # Extracting values for the selected pixel across all ensembles
+            pixel_values = forecast_djf_median_sums.sel(longitude=lon, latitude=lat, method="nearest")
+        
+            # Plotting a boxplot of the selected pixel across all ensembles
+            fig = px.box(pixel_values.to_dataframe().reset_index(), y="forecast_djf_median_sums")
+            st.plotly_chart(fig, use_container_width=True)
 
 if __name__ == "__main__":
     main()
