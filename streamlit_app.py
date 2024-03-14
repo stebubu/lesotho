@@ -263,8 +263,8 @@ def main():
                                      name="Lower Tercile", line=dict(color="FireBrick", width=4, dash='dash')))
                  
             # Annotate the lower_tercile_value on the plot
-            fig.add_annotation(x=0.5, xref="paper", y=lower_tercile_value, text=f"Lower Tercile: {lower_tercile_value}",
-                               showarrow=True, arrowhead=1, ax=0, ay=-40)
+            #fig.add_annotation(x=0.5, xref="paper", y=lower_tercile_value, text=f"Lower Tercile: {lower_tercile_value}",
+           #                       showarrow=True, arrowhead=1, ax=0, ay=-40)
 
 
             # Plotting a boxplot of the selected pixel across all ensembles
