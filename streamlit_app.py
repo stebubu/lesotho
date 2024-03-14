@@ -223,6 +223,7 @@ def main():
         
             # Extracting values for the selected pixel across all ensembles
             pixel_values = forecast_djf_median_sums.sel(lon=lon, lat=lat, method="nearest")
+            print (pixel_values)
         
             # Plotting a boxplot of the selected pixel across all ensembles
             fig = px.box(pixel_values.to_dataframe().reset_index(), y="forecast_djf_median_sums")
