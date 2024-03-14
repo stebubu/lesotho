@@ -8,8 +8,53 @@ from matplotlib.colors import ListedColormap, BoundaryNorm
 import tempfile
 
 def calculate_djf_sum(data_array):
-    # Insert the DJF calculation function here
-    pass
+    # Create a new 'year' coordinate for grouping, shifting December to the next year
+    year_shifted = data_array.time.dt.year + (data_array.time.dt.month == 12)
+
+    # Assign this 'year' coordinate to the DataArray
+    data_array = data_array.assign_coords(djf_year=year_shifted)
+
+    # Select DJF months (Dec of the previous year from the original, Jan and Feb of the current 'djf_year')
+    djf_data = data_array.where(data_array.time.dt.month.isin([1, 2, 12]), drop=True)
+
+    # Now, group by this 'djf_year' and sum to get DJF precipitation sum
+    djf_sum = djf_data.groupby('djf_year').sum(dim="time")
+
+    return djf_sum
+
+def filter_djf_months(data_array):
+    """
+    Filters the input data_array for DJF months and adjusts the year for December entries.
+
+    Parameters:
+    - data_array: xarray.DataArray with a 'time' dimension in datetime64 format.
+
+    Returns:
+    - xarray.DataArray filtered for DJF months with adjusted years for December.
+    """
+    # Ensure time is a pandas DatetimeIndex for vectorized operations
+    times = pd.to_datetime(data_array['time'].values)
+
+    # Create adjusted times for year shift in December
+    adjusted_times = times.where(times.month != 12, times + pd.offsets.DateOffset(years=1))
+
+    # Extract the year, now directly using pandas DatetimeIndex.year for vectorized operation
+    adjusted_years = adjusted_times.year
+
+    # Assign adjusted year back to data_array as a new coordinate
+    data_array = data_array.assign_coords(djf_year=('time', adjusted_years))
+
+    # Filter for DJF months, using original times for condition to maintain original dataset's size
+    djf_data = data_array.where(data_array['time.month'].isin([12, 1, 2]), drop=True)
+
+    return djf_data
+
+
+# Step 2: Calculate the DJF median sum for each pixel across ensembles
+def calculate_djf_median_sums(data_array):
+    # Group by DJF year after adjusting December's year
+    djf_grouped = data_array.groupby('time.year').sum(dim=['time'])
+    return djf_grouped.sum(dim='year')
     
 # Modify the load_netcdf function to specify the engine explicitly
 def load_netcdf(file, engine='netcdf4'):
@@ -22,6 +67,65 @@ def load_netcdf(file, engine='netcdf4'):
         os.remove(tmp_path)
         return dataset
     return None
+
+def calculate_below_normal_probability_ensemble(forecast_djf_data, lower_tercile, n_ensembles):
+    """
+    Calculate the probability of below-normal precipitation for each pixel across the forecast dataset,
+    considering all ensemble members.
+
+    Parameters:
+    - forecast_djf_data: xarray.DataArray with dimensions ('ensemble', 'djf_year', 'lat', 'lon')
+    - lower_tercile: xarray.DataArray with dimensions ('lat', 'lon') representing the lower tercile threshold
+
+    Returns:
+    - xarray.DataArray representing the probability of below-normal precipitation for each pixel
+    """
+    # Ensure lower_tercile is correctly calculated and has the right dimensions
+    if not isinstance(lower_tercile, xr.DataArray) or 'lat' not in lower_tercile.dims or 'lon' not in lower_tercile.dims:
+        raise ValueError("lower_tercile must be an xarray.DataArray with 'lat' and 'lon' dimensions.")
+
+    # Assuming forecast_djf_sums is already summed over 'time' and needs to be compared across 'ensemble'
+
+    # Create an empty array with the target shape
+    expanded_shape = (n_ensembles,) + lower_tercile.shape
+    # Use np.tile to replicate lower_tercile values across the new 'ensemble' dimension
+    replicated_values = np.tile(lower_tercile.values[None, :, :], (n_ensembles, 1, 1))
+
+    # Construct the new DataArray with the replicated values
+    lower_tercile_expanded = xr.DataArray(
+        replicated_values,
+        dims=['ensemble', 'lat', 'lon'],
+        coords={
+            'ensemble': np.arange(n_ensembles),
+            'lat': lower_tercile.lat,
+            'lon': lower_tercile.lon
+        }
+    )
+
+    # Align 'lat' and 'lon' coordinates with forecast_djf_data to ensure exact match
+    # This step is crucial for operations involving both DataArrays
+    lower_tercile_expanded = lower_tercile_expanded.assign_coords(
+        lat=forecast_djf_data.lat,
+        lon=forecast_djf_data.lon
+    )
+    #print (lower_tercile_expanded)
+    #print (forecast_djf_data)
+
+    # Verify dimensions
+    print("Expanded Lower Tercile Dimensions:", lower_tercile_expanded.dims)
+    print("Forecast Data Dimensions:", forecast_djf_data.dims)
+
+    # Compare each ensemble's DJF sum with the lower_tercile threshold
+    below_normal = forecast_djf_data < lower_tercile_expanded
+    print (below_normal)
+
+    # Count instances where the DJF sum is below the lower_tercile threshold for each pixel, across all ensembles
+    below_normal_count = below_normal.sum(dim='ensemble')
+
+    # Calculate the probability by dividing by the number of ensemble members
+    probability = below_normal_count / n_ensembles
+
+    return probability
 
 def main():
     st.title("Climate Data Analysis")
@@ -50,16 +154,25 @@ def main():
             historical_precip_da = historical_data['precipitation']
             forecast_precip_da = forecast_data['precipitation']
 
-            # Calculate DJF sums for historical data
             historical_djf_sum = calculate_djf_sum(historical_precip_da)
 
-            # Calculate event threshold
-            event_threshold = historical_djf_sum.quantile(0.2, dim="djf_year")
+
+            event_threshold = historical_djf_sum.quantile(0.2)
+            # Step 2: Determine Terciles for Historical Data
+            #lower_tercile = historical_djf_sum.quantile(0.33, dim="time")
+            #upper_tercile = historical_djf_sum.quantile(0.67, dim="time")
+            
+            lower_tercile = historical_djf_sum.quantile(0.33, dim="djf_year")
+            upper_tercile = historical_djf_sum.quantile(0.67, dim="djf_year")
+
+            forecast_djf_filtered = filter_djf_months(forecast_precip_da)
+
+            forecast_djf_median_sums = calculate_djf_median_sums(forecast_djf_filtered)
 
             # Step 4: Plot probability below normal for forecast
-            forecast_djf_sum = calculate_djf_sum(forecast_precip_da)
-            below_normal_forecast = forecast_djf_sum < event_threshold
-            prob_below_normal = below_normal_forecast.mean(dim="djf_year")
+            # Calculate the below-normal probability using the lower_tercile from historical data
+            below_normal_probability_forecast = calculate_below_normal_probability_ensemble(forecast_djf_median_sums, lower_tercile,n_ensembles)
+
         
             # Custom colormap for probability plot
             colors = ['red', 'green']  # Red for below 0.33, green for above
@@ -67,7 +180,7 @@ def main():
             norm = BoundaryNorm([0, 0.33, 1], cmap.N)
 
             fig, ax = plt.subplots()
-            prob_below_normal.plot(ax=ax, cmap=cmap, norm=norm)
+            below_normal_probability_forecast.plot(ax=ax, cmap=cmap, norm=norm)
             st.pyplot(fig)
 
             # Step 5: Interactive year selection and plotting
