@@ -10,20 +10,15 @@ def calculate_djf_sum(data_array):
     # Insert the DJF calculation function here
     pass
     
-def load_netcdf(file):
+# Modify the load_netcdf function to specify the engine explicitly
+def load_netcdf(file, engine='netcdf4'):
     if file is not None:
-        # Create a temporary file, ensuring it's closed before using it with xarray
         with tempfile.NamedTemporaryFile(delete=False, suffix='.nc') as tmp:
-            # Write the uploaded file's contents to the temporary file
-            tmp.write(file.getvalue())  # Using getvalue() for BytesIO from Streamlit upload
-            tmp_path = tmp.name  # Save temporary file name for later access
-        
-        # Now the temporary file is closed, open it with xarray
-        dataset = xr.open_dataset(tmp_path)
-        
-        # Cleanup: remove the temporary file after loading
+            tmp.write(file.getvalue())
+            tmp_path = tmp.name
+        # Specify the engine explicitly when opening the dataset
+        dataset = xr.open_dataset(tmp_path, engine=engine)
         os.remove(tmp_path)
-        
         return dataset
     return None
 
