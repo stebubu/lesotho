@@ -226,7 +226,7 @@ def main():
             print (pixel_values)
         
             # Plotting a boxplot of the selected pixel across all ensembles
-            fig = px.box(pixel_values.to_dataframe().reset_index(), y="forecast_djf_median_sums")
+            fig = px.box(pixel_values.to_dataframe().reset_index(), y="precipitation")
             st.plotly_chart(fig, use_container_width=True)
 
 if __name__ == "__main__":
