@@ -251,7 +251,7 @@ def main():
 
             # Add a horizontal line for the lower_tercile_value
             fig.add_trace(go.Scatter(x=[''], y=[lower_tercile_value], mode="lines", name="Lower Tercile",
-                                     line=dict(color="royalblue", dash='dash')))
+                                     line=dict(color="red", dash='dash')))
             
             # Annotate the lower_tercile_value on the plot
             fig.add_annotation(x=0.5, xref="paper", y=lower_tercile_value, text=f"Lower Tercile: {lower_tercile_value}",
