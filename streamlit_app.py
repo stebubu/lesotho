@@ -245,12 +245,15 @@ def main():
             lon = st.select_slider('Select Longitude', options=selected_ensemble.lon.values)
             lat = st.select_slider('Select Latitude', options=selected_ensemble.lat.values)
 
-            # Plotting a boxplot of the selected pixel across all ensembles
-            fig = px.box(pixel_values.to_dataframe().reset_index(), y="precipitation")
+
 
             
             # Extracting values for the selected pixel across all ensembles
             pixel_values = forecast_djf_median_sums.sel(lon=lon, lat=lat, method="nearest")
+            # Plotting a boxplot of the selected pixel across all ensembles
+            fig = px.box(pixel_values.to_dataframe().reset_index(), y="precipitation")
+
+            
             lower_tercile_value =lower_tercile.sel(lon=lon, lat=lat, method="nearest")
 
             # Add a horizontal line for the lower_tercile_value
