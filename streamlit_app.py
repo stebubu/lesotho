@@ -12,13 +12,18 @@ def calculate_djf_sum(data_array):
     
 def load_netcdf(file):
     if file is not None:
+        # Create a temporary file, ensuring it's closed before using it with xarray
         with tempfile.NamedTemporaryFile(delete=False, suffix='.nc') as tmp:
             # Write the uploaded file's contents to the temporary file
-            tmp.write(file.read())
-            tmp.seek(0)  # Move to the beginning of the file for reading
-            # Load the dataset from the temporary file
-            dataset = xr.open_dataset(tmp.name)
-        os.unlink(tmp.name)  # Delete the temporary file
+            tmp.write(file.getvalue())  # Using getvalue() for BytesIO from Streamlit upload
+            tmp_path = tmp.name  # Save temporary file name for later access
+        
+        # Now the temporary file is closed, open it with xarray
+        dataset = xr.open_dataset(tmp_path)
+        
+        # Cleanup: remove the temporary file after loading
+        os.remove(tmp_path)
+        
         return dataset
     return None
 
