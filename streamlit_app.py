@@ -269,11 +269,6 @@ def main():
             fig = px.box(pixel_values.to_dataframe().reset_index(), y="precipitation")
 
 
-           
-            # Update layout to ensure the annotation is within the plot area
-            fig.update_layout(annotations=[dict(xref='paper', x=0.5, y=lower_tercile_value,
-                                                text=f"Lower Tercile: {lower_tercile_value}", showarrow=True,
-                                                arrowhead=1, ax=0, ay=-40, bgcolor="LightYellow")])
 
         
 
