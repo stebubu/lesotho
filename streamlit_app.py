@@ -7,6 +7,7 @@ import matplotlib.pyplot as plt
 from matplotlib.colors import ListedColormap, BoundaryNorm
 import tempfile
 import plotly.express as px
+import plotly.graph_objects as go
 
 def calculate_djf_sum(data_array):
     # Create a new 'year' coordinate for grouping, shifting December to the next year
@@ -223,7 +224,17 @@ def main():
         
             # Extracting values for the selected pixel across all ensembles
             pixel_values = forecast_djf_median_sums.sel(lon=lon, lat=lat, method="nearest")
-            print (pixel_values)
+            lower_tercile_value =lower_tercile.sel(lon=lon, lat=lat, method="nearest")
+
+            # Add a horizontal line for the lower_tercile_value
+            fig.add_trace(go.Scatter(x=[''], y=[lower_tercile_value], mode="lines", name="Lower Tercile",
+                                     line=dict(color="royalblue", dash='dash')))
+            
+            # Annotate the lower_tercile_value on the plot
+            fig.add_annotation(x=0.5, xref="paper", y=lower_tercile_value, text=f"Lower Tercile: {lower_tercile_value}",
+                               showarrow=True, arrowhead=1, ax=0, ay=-40)
+
+            
         
             # Plotting a boxplot of the selected pixel across all ensembles
             fig = px.box(pixel_values.to_dataframe().reset_index(), y="precipitation")
