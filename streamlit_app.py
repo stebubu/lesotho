@@ -217,7 +217,7 @@ def main():
 
             # Plotting lower forecast_djf_median_sums with custom color scale
             fig = px.imshow(forecast_djf_median_sums, 
-                            labels=dict(x="Longitude", y="Latitude", color="red"),
+                            labels=dict(x="Longitude", y="Latitude", color="forecast_djf_median_sums"),
                             x=forecast_djf_median_sums.lon,
                             y=forecast_djf_median_sums.lat)
             
