@@ -253,7 +253,7 @@ def main():
 
 
             
-            lower_tercile_value =lower_tercile.sel(lon=lon, lat=lat, method="nearest")
+            lower_tercile_value =int(lower_tercile.sel(lon=lon, lat=lat, method="nearest"))
             
             st.write(int(lower_tercile_value))
 
