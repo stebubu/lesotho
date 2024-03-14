@@ -207,8 +207,8 @@ def main():
             # Plotting selected ensemble
             fig = px.imshow(selected_ensemble, 
                             labels=dict(x="Longitude", y="Latitude", color="Value"),
-                            x=selected_ensemble.longitude,
-                            y=selected_ensemble.latitude)
+                            x=selected_ensemble.lon,
+                            y=selected_ensemble.lat)
             fig.update_traces(hoverinfo='x+y+z', showscale=True)
             st.plotly_chart(fig, use_container_width=True)
         
