@@ -218,8 +218,8 @@ def main():
             # Consider providing instructions to the user to select a specific longitude and latitude from dropdowns or sliders
             # and then use those to plot the boxplot.
         
-            lon = st.select_slider('Select Longitude', options=selected_ensemble.longitude.values)
-            lat = st.select_slider('Select Latitude', options=selected_ensemble.latitude.values)
+            lon = st.select_slider('Select Longitude', options=selected_ensemble.lon.values)
+            lat = st.select_slider('Select Latitude', options=selected_ensemble.lat.values)
         
             # Extracting values for the selected pixel across all ensembles
             pixel_values = forecast_djf_median_sums.sel(longitude=lon, latitude=lat, method="nearest")
