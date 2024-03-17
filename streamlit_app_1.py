@@ -38,12 +38,7 @@ def calculate_probabilities(forecast_djf_data, lower_tercile):
     below_normal = forecast_djf_data < expanded_lt
     return below_normal.mean(dim='ensemble')
 
-color_scale = [
-        (0, "red"),    # start with red at 0
-        (0.33, "red"), # transition to red by 0.33
-        (0.33, "green"),  # immediately switch to green at 0.33
-        (1, "green")   # end with green at 1
-    ]
+
 
 def main():
     st.title("Climate Data Analysis")
@@ -79,6 +74,12 @@ def main():
         # Visualize Below-Normal Probability
         st.header("Below-Normal Probability")
         #color_scale = prepare_custom_colormap()
+        color_scale = [
+        (0, "red"),    # start with red at 0
+        (0.33, "red"), # transition to red by 0.33
+        (0.33, "green"),  # immediately switch to green at 0.33
+        (1, "green")   # end with green at 1
+    ]
         fig = px.imshow(below_normal_probability, color_continuous_scale=color_scale, labels={'color': 'Probability'}, aspect='auto')
         st.plotly_chart(fig)
 
