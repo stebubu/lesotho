@@ -38,15 +38,12 @@ def calculate_probabilities(forecast_djf_data, lower_tercile):
     below_normal = forecast_djf_data < expanded_lt
     return below_normal.mean(dim='ensemble')
 
-def prepare_custom_colormap():
-    # Define a custom color scale with specific transition points
-    custom_color_scale = [
+custom_color_scale = [
         (0, "red"),    # start with red at 0
         (0.33, "red"), # transition to red by 0.33
         (0.33, "green"),  # immediately switch to green at 0.33
         (1, "green")   # end with green at 1
     ]
-    return custom_color_scale
 
 def main():
     st.title("Climate Data Analysis")
@@ -94,5 +91,8 @@ def main():
         st.plotly_chart(fig)
 
         # Add more plots as needed...
+
+
+
 if __name__ == "__main__":
     main()
