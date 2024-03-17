@@ -83,8 +83,8 @@ def main():
         # Plotting below_normal_probability_forecast with custom color scale
         fig = px.imshow(below_normal_probability, 
                             labels=dict(x="Longitude", y="Latitude", color="Probability"),
-                            x=below_normal_probability_forecast.lon,
-                            y=below_normal_probability_forecast.lat,
+                            x=below_normal_probability.lon,
+                            y=below_normal_probability.lat,
                             color_continuous_scale=custom_color_scale)
             
         fig.update_traces(hoverinfo='x+y+z', showscale=True)
