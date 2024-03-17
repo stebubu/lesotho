@@ -114,12 +114,12 @@ def calculate_below_normal_probability_ensemble(forecast_djf_data, lower_tercile
     #print (forecast_djf_data)
 
     # Verify dimensions
-    print("Expanded Lower Tercile Dimensions:", lower_tercile_expanded.dims)
-    print("Forecast Data Dimensions:", forecast_djf_data.dims)
+    #print("Expanded Lower Tercile Dimensions:", lower_tercile_expanded.dims)
+    #print("Forecast Data Dimensions:", forecast_djf_data.dims)
 
     # Compare each ensemble's DJF sum with the lower_tercile threshold
     below_normal = forecast_djf_data < lower_tercile_expanded
-    print (below_normal)
+    #print (below_normal)
 
     # Count instances where the DJF sum is below the lower_tercile threshold for each pixel, across all ensembles
     below_normal_count = below_normal.sum(dim='ensemble')
