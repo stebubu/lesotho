@@ -156,7 +156,7 @@ def calculate_below_normal_probability_ensemble(forecast_djf_data, lower_tercile
     return probability
 
 def main():
-    st.title("Climate Data Analysis")
+    st.title("I-CISK LL Lesotho Drought Climate Data Analysis")
     n_ensembles = 50
 
 
