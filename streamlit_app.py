@@ -259,9 +259,7 @@ def main():
             
             # Extracting values for the selected pixel across all ensembles
             pixel_values = forecast_djf_median_sums.sel(lon=lon_1, lat=lat_1, method="nearest")
-            print(lower_tercile)
-            print(lon_1,lat_1)
-            # Plotting a boxplot of the selected pixel across all ensembles
+          # Plotting a boxplot of the selected pixel across all ensembles
             fig = px.box(pixel_values.to_dataframe().reset_index(), y="precipitation")
 
 
@@ -272,11 +270,11 @@ def main():
 
             # Add a horizontal line for the lower_tercile_value
             # Add a horizontal line for the lower_tercile_value with adjusted properties
-            fig.add_trace(go.Scatter(x=[0, 1], y=[lower_tercile_value, lower_tercile_value], mode="lines",
+            fig.add_trace(go.Scatter(x=[-1, 1], y=[lower_tercile_value, lower_tercile_value], mode="lines",
                                      name="Lower Tercile", line=dict(color="FireBrick", width=4, dash='dash')))
                  
             # Annotate the lower_tercile_value on the plot
-            fig.add_annotation(x=0.5, xref="paper", y=lower_tercile_value, text=f"Lower Tercile: {lower_tercile_value}",
+            fig.add_annotation(x=0.0, xref="paper", y=lower_tercile_value, text=f"Lower Tercile: {lower_tercile_value}",
                                   showarrow=True, arrowhead=1, ax=0, ay=-40)
 
  
