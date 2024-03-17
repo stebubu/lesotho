@@ -38,7 +38,7 @@ def calculate_probabilities(forecast_djf_data, lower_tercile):
     below_normal = forecast_djf_data < expanded_lt
     return below_normal.mean(dim='ensemble')
 
-custom_color_scale = [
+color_scale = [
         (0, "red"),    # start with red at 0
         (0.33, "red"), # transition to red by 0.33
         (0.33, "green"),  # immediately switch to green at 0.33
