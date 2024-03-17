@@ -259,7 +259,7 @@ def main():
             
             # Extracting values for the selected pixel across all ensembles
             pixel_values = forecast_djf_median_sums.sel(lon=lon, lat=lat, method="nearest")
-
+            print(lower_tercile)
 
             
             lower_tercile_value =lower_tercile.sel(lon=lon, lat=lat, method="nearest").item()
