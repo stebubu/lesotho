@@ -81,7 +81,7 @@ def main():
         (1, "green")   # end with green at 1
         ]
         # Plotting below_normal_probability_forecast with custom color scale
-        fig = px.imshow(below_normal_probability_forecast, 
+        fig = px.imshow(below_normal_probability, 
                             labels=dict(x="Longitude", y="Latitude", color="Probability"),
                             x=below_normal_probability_forecast.lon,
                             y=below_normal_probability_forecast.lat,
