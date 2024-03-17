@@ -161,7 +161,7 @@ def main():
 
 
     # Step 1: Upload and process historical data
-    '''historical_file = st.file_uploader("Upload historical netCDF", type=["nc"], key="historical")
+    """historical_file = st.file_uploader("Upload historical netCDF", type=["nc"], key="historical")
     if historical_file is not None:
         st.success("Historical data uploaded successfully.")
         historical_data = load_netcdf(historical_file)
@@ -181,7 +181,7 @@ def main():
 
             # Assuming 'precipitation' variable exists; adjust as necessary
             historical_precip_da = historical_data['precipitation']
-            forecast_precip_da = forecast_data['precipitation']'''
+            forecast_precip_da = forecast_data['precipitation']"""
 
     if st.button('Generate Synthetic Data'):
         historical_data, forecast_data = generate_synthetic_data()
