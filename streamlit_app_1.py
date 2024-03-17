@@ -48,27 +48,48 @@ def prepare_custom_colormap():
 def main():
     st.title("Climate Data Analysis")
 
+    # Step 1: Data Upload
     historical_file = st.file_uploader("Upload historical netCDF", type=["nc"], key="historical")
-    if historical_file:
+    forecast_file = st.file_uploader("Upload forecast netCDF", type=["nc"], key="forecast")
+
+    if historical_file and forecast_file:
+        st.success("Data uploaded successfully.")
         historical_data = load_netcdf(historical_file)
-        st.success("Historical data uploaded successfully.")
-
-    forecast_file = st.file_uploader("Upload forecast netCDF for 2023", type=["nc"], key="forecast")
-    if forecast_file:
         forecast_data = load_netcdf(forecast_file)
-        st.success("Forecast data uploaded successfully.")
 
-        # Example process on the uploaded data
-        if historical_data and forecast_data:
-            # Process your data here
-            st.write("Data processed.")
-            
-            # Visualization example
-            color_scale = prepare_custom_colormap()
-            fig = px.imshow(forecast_data, color_continuous_scale=color_scale, labels={"color": "Probability"})
-            st.plotly_chart(fig, use_container_width=True)
+        # Assuming 'precipitation' is a variable in both datasets
+        historical_precip = historical_data['precipitation']
+        forecast_precip = forecast_data['precipitation']
 
-            # Additional visualization and analysis as required
+        # Step 2: Process Historical Data
+        djf_historical_sum = calculate_djf_sum(historical_precip)
+        lower_tercile, upper_tercile = djf_historical_sum.quantile([0.33, 0.67], dim="djf_year")
 
+        # Visualize Historical DJF Sum
+        st.header("Historical DJF Sum")
+        fig = px.imshow(djf_historical_sum.mean(dim='djf_year'), labels={'color': 'DJF Sum'}, aspect='auto')
+        st.plotly_chart(fig)
+
+        # Step 3: Process Forecast Data
+        forecast_djf_sum = calculate_djf_sum(forecast_precip)
+
+        # Step 4: Calculate Below-Normal Probability
+        below_normal_probability = calculate_probabilities(forecast_djf_sum, lower_tercile)
+
+        # Visualize Below-Normal Probability
+        st.header("Below-Normal Probability")
+        color_scale = prepare_custom_colormap()
+        fig = px.imshow(below_normal_probability, color_continuous_scale=color_scale, labels={'color': 'Probability'}, aspect='auto')
+        st.plotly_chart(fig)
+
+        # Step 5: Interactive Visualization of Forecast Data
+        ensemble_selection = st.selectbox("Select Ensemble", forecast_djf_sum.ensemble.values)
+        selected_ensemble_data = forecast_djf_sum.sel(ensemble=ensemble_selection)
+
+        st.header(f"Forecast Data for Ensemble {ensemble_selection}")
+        fig = px.imshow(selected_ensemble_data, labels={'color': 'Precipitation'}, aspect='auto')
+        st.plotly_chart(fig)
+
+        # Add more plots as needed...
 if __name__ == "__main__":
     main()
