@@ -261,6 +261,9 @@ def main():
             pixel_values = forecast_djf_median_sums.sel(lon=lon_1, lat=lat_1, method="nearest")
             print(lower_tercile)
             print(lon_1,lat_1)
+            # Plotting a boxplot of the selected pixel across all ensembles
+            fig = px.box(pixel_values.to_dataframe().reset_index(), y="precipitation")
+
 
             
             lower_tercile_value =lower_tercile.sel(lon=lon_1, lat=lat_1, method="nearest").item()
@@ -276,22 +279,11 @@ def main():
             fig.add_annotation(x=0.5, xref="paper", y=lower_tercile_value, text=f"Lower Tercile: {lower_tercile_value}",
                                   showarrow=True, arrowhead=1, ax=0, ay=-40)
 
-            # Adding a point for the lower_tercile_value
-            x_coordinate_for_point = 0.5
-            fig.add_trace(go.Scatter(x=[x_coordinate_for_point], y=[lower_tercile_value],
-                                     mode='markers', name='Lower Tercile',
-                                     marker=dict(color='red', size=10), 
-                                     showlegend=True))
-            
-            # Optionally, add an annotation near the point to label it
-            fig.add_annotation(x=x_coordinate_for_point, y=lower_tercile_value,
-                               text=f"Lower Tercile: {lower_tercile_value}", showarrow=True,
-                               arrowhead=1, ax=0, ay=-40, bgcolor='white')
-
+ 
 
 
             # Plotting a boxplot of the selected pixel across all ensembles
-            #fig = px.box(pixel_values.to_dataframe().reset_index(), y="precipitation")
+            fig = px.box(pixel_values.to_dataframe().reset_index(), y="precipitation")
 
 
 
