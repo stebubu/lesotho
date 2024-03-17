@@ -251,19 +251,19 @@ def main():
             # Consider providing instructions to the user to select a specific longitude and latitude from dropdowns or sliders
             # and then use those to plot the boxplot.
         
-            lon = st.select_slider('Select Longitude', options=selected_ensemble.lon.values)
-            lat = st.select_slider('Select Latitude', options=selected_ensemble.lat.values)
+            lon_1 = st.select_slider('Select Longitude', options=selected_ensemble.lon.values)
+            lat_1 = st.select_slider('Select Latitude', options=selected_ensemble.lat.values)
 
 
 
             
             # Extracting values for the selected pixel across all ensembles
-            pixel_values = forecast_djf_median_sums.sel(lon=lon, lat=lat, method="nearest")
+            pixel_values = forecast_djf_median_sums.sel(lon=lon_1, lat=lat_1, method="nearest")
             print(lower_tercile)
-            lon = st.select_slider('Select Longitude', options=selected_ensemble.lon.values)
-            lat = st.select_slider('Select Latitude', options=selected_ensemble.lat.values)
+            print(lon_1,lat_1)
+
             
-            lower_tercile_value =lower_tercile.sel(lon=lon, lat=lat, method="nearest").item()
+            lower_tercile_value =lower_tercile.sel(lon=lon_1, lat=lat_1, method="nearest").item()
             
             st.write(int(lower_tercile_value))
 
