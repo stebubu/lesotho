@@ -182,141 +182,152 @@ def main():
             # Assuming 'precipitation' variable exists; adjust as necessary
             historical_precip_da = historical_data['precipitation']
             forecast_precip_da = forecast_data['precipitation']'''
-    if st.button('Generate Synthetic Data'):
-        historical_precip_da, forecast_precip_da = generate_synthetic_data()
-        if historical_precip_da is not None:
 
-            historical_djf_sum = calculate_djf_sum(historical_precip_da)
-    
-    
-            event_threshold = historical_djf_sum.quantile(0.2)
-            # Step 2: Determine Terciles for Historical Data
-            #lower_tercile = historical_djf_sum.quantile(0.33, dim="time")
-            #upper_tercile = historical_djf_sum.quantile(0.67, dim="time")
-            
-            lower_tercile = historical_djf_sum.quantile(0.33, dim="djf_year")
-            upper_tercile = historical_djf_sum.quantile(0.67, dim="djf_year")
-    
-            forecast_djf_filtered = filter_djf_months(forecast_precip_da)
-    
-            forecast_djf_median_sums = calculate_djf_median_sums(forecast_djf_filtered)
-    
-            # Step 4: Plot probability below normal for forecast
-            # Calculate the below-normal probability using the lower_tercile from historical data
-            below_normal_probability_forecast = calculate_below_normal_probability_ensemble(forecast_djf_median_sums, lower_tercile,n_ensembles)
-    
+    if st.button('Generate Synthetic Data'):
+        historical_data, forecast_data = generate_synthetic_data()
+        st.session_state['historical_data'] = historical_data
+        st.session_state['forecast_data'] = forecast_data
+        st.success("Synthetic data generated successfully.")
+
+    # Check if data is already generated and stored in session state
+    if 'historical_data' in st.session_state and 'forecast_data' in st.session_state:
+
+        historical_precip_da, forecast_precip_da = generate_synthetic_data()
+
+
+        historical_djf_sum = calculate_djf_sum(historical_precip_da)
+
+
+        event_threshold = historical_djf_sum.quantile(0.2)
+        # Step 2: Determine Terciles for Historical Data
+        #lower_tercile = historical_djf_sum.quantile(0.33, dim="time")
+        #upper_tercile = historical_djf_sum.quantile(0.67, dim="time")
         
-            # Custom colormap for probability plot
-            colors = ['red', 'green']  # Red for below 0.33, green for above
-            cmap = ListedColormap(colors)
-            norm = BoundaryNorm([0, 0.33, 1], cmap.N)
+        lower_tercile = historical_djf_sum.quantile(0.33, dim="djf_year")
+        upper_tercile = historical_djf_sum.quantile(0.67, dim="djf_year")
+
+        forecast_djf_filtered = filter_djf_months(forecast_precip_da)
+
+        forecast_djf_median_sums = calculate_djf_median_sums(forecast_djf_filtered)
+
+        # Step 4: Plot probability below normal for forecast
+        # Calculate the below-normal probability using the lower_tercile from historical data
+        below_normal_probability_forecast = calculate_below_normal_probability_ensemble(forecast_djf_median_sums, lower_tercile,n_ensembles)
+
     
-            fig, ax = plt.subplots()
-            below_normal_probability_forecast.plot(ax=ax, cmap=cmap, norm=norm)
-            st.pyplot(fig)
-           
-            
-            # Assuming below_normal_probability_forecast is your dataset
-            # Create a custom color scale
-            custom_color_scale = [
-                [0, "red"],  # Values normalized to 0 will be red
-                [0.32, "red"],  # Up to 0.33, also red
-                [0.34, "green"],  # Values normalized exactly at 0.33 will be an abrupt change to green
-                [1, "green"]  # Up to the maximum normalized value (1), will be green
-            ]
-            
-            # Plotting below_normal_probability_forecast with custom color scale
-            fig = px.imshow(below_normal_probability_forecast, 
-                            labels=dict(x="Longitude", y="Latitude", color="Probability"),
-                            x=below_normal_probability_forecast.lon,
-                            y=below_normal_probability_forecast.lat,
-                            color_continuous_scale=custom_color_scale)
-            
-            fig.update_traces(hoverinfo='x+y+z', showscale=True)
-            st.plotly_chart(fig, use_container_width=True)            
-            
-            # Plotting lower tercilet with custom color scale
-            fig = px.imshow(lower_tercile, 
-                            labels=dict(x="Longitude", y="Latitude", color="lower_tercile"),
-                            x=lower_tercile.lon,
-                            y=lower_tercile.lat)
-            
-            fig.update_traces(hoverinfo='x+y+z', showscale=True)
-            st.plotly_chart(fig, use_container_width=True)            
-    
+        # Custom colormap for probability plot
+        colors = ['red', 'green']  # Red for below 0.33, green for above
+        cmap = ListedColormap(colors)
+        norm = BoundaryNorm([0, 0.33, 1], cmap.N)
+
+        fig, ax = plt.subplots()
+        below_normal_probability_forecast.plot(ax=ax, cmap=cmap, norm=norm)
+        st.pyplot(fig)
+       
         
-                        
-    
-            # Step 5: Interactive year selection and plotting
-            year = st.slider("Select a Year", int(historical_djf_sum.djf_year.min()), int(historical_djf_sum.djf_year.max()))
-            selected_year_data = historical_djf_sum.sel(djf_year=year)
-            fig, ax = plt.subplots()
-            selected_year_data.plot(ax=ax)
-            st.pyplot(fig)
-    
-    
-            # Step 6: Interactive year selection and plotting
-            ens = st.slider("Select Ensemble", int(0), int(49))
-            selected_ensemble = forecast_djf_median_sums.sel(ensemble=ens)
-            fig, ax = plt.subplots()
-            selected_ensemble.plot(ax=ax)
-            st.pyplot(fig)
-            # Add more functionality as needed
-            # Interactive Ensemble Selection
-            #ens1 = st.slider("Select Ensemble", 0, 49)
-            #selected_ensemble = forecast_djf_median_sums.sel(ensemble=ens)
+        # Assuming below_normal_probability_forecast is your dataset
+        # Create a custom color scale
+        custom_color_scale = [
+            [0, "red"],  # Values normalized to 0 will be red
+            [0.32, "red"],  # Up to 0.33, also red
+            [0.34, "green"],  # Values normalized exactly at 0.33 will be an abrupt change to green
+            [1, "green"]  # Up to the maximum normalized value (1), will be green
+        ]
         
-            # Plotting selected ensemble
-            fig = px.imshow(selected_ensemble, 
-                            labels=dict(x="Longitude", y="Latitude", color="Value"),
-                            x=selected_ensemble.lon,
-                            y=selected_ensemble.lat)
-            fig.update_traces(hoverinfo='x+y+z', showscale=True)
-            st.plotly_chart(fig, use_container_width=True)
+        # Plotting below_normal_probability_forecast with custom color scale
+        fig = px.imshow(below_normal_probability_forecast, 
+                        labels=dict(x="Longitude", y="Latitude", color="Probability"),
+                        x=below_normal_probability_forecast.lon,
+                        y=below_normal_probability_forecast.lat,
+                        color_continuous_scale=custom_color_scale)
         
-            # Interactive Click to display value and plot boxplot
-            # Note: Due to limitations in streamlit's direct integration with interactive clicks on plotly maps,
-            # the actual interaction to display values and plot a boxplot on click would need a different approach.
-            # Consider providing instructions to the user to select a specific longitude and latitude from dropdowns or sliders
-            # and then use those to plot the boxplot.
+        fig.update_traces(hoverinfo='x+y+z', showscale=True)
+        st.plotly_chart(fig, use_container_width=True)            
         
-            lon_1 = st.select_slider('Select Longitude', options=selected_ensemble.lon.values)
-            lat_1 = st.select_slider('Select Latitude', options=selected_ensemble.lat.values)
-    
-    
-    
-            
-            # Extracting values for the selected pixel across all ensembles
-            pixel_values = forecast_djf_median_sums.sel(lon=lon_1, lat=lat_1, method="nearest")
-          # Plotting a boxplot of the selected pixel across all ensembles
-            fig = px.box(pixel_values.to_dataframe().reset_index(), y="precipitation")
-    
-    
-            
-            lower_tercile_value =lower_tercile.sel(lon=lon_1, lat=lat_1, method="nearest").item()
-            
-            st.write(int(lower_tercile_value))
-    
-            # Add a horizontal line for the lower_tercile_value
-            # Add a horizontal line for the lower_tercile_value with adjusted properties
-            fig.add_trace(go.Scatter(x=[0, 1], y=[lower_tercile_value, lower_tercile_value], mode="lines",
-                                     name="Lower Tercile", line=dict(color="FireBrick", width=4, dash='dash')))
-                 
-            # Annotate the lower_tercile_value on the plot
-            fig.add_annotation(x=1.0, xref="paper", y=lower_tercile_value, text=f"Lower Tercile: {lower_tercile_value}",
-                                  showarrow=True, arrowhead=1, ax=0, ay=-40)
-    
-    
-    
-    
-            # Plotting a boxplot of the selected pixel across all ensembles
-            #fig = px.box(pixel_values.to_dataframe().reset_index(), y="precipitation")
-    
-    
-    
+        # Plotting lower tercilet with custom color scale
+        fig = px.imshow(lower_tercile, 
+                        labels=dict(x="Longitude", y="Latitude", color="lower_tercile"),
+                        x=lower_tercile.lon,
+                        y=lower_tercile.lat)
         
+        fig.update_traces(hoverinfo='x+y+z', showscale=True)
+        st.plotly_chart(fig, use_container_width=True)            
+
     
-            st.plotly_chart(fig, use_container_width=True)
+                    
+
+        # Step 5: Interactive year selection and plotting
+        year = st.slider("Select a Year", int(historical_djf_sum.djf_year.min()), int(historical_djf_sum.djf_year.max()))
+        selected_year_data = historical_djf_sum.sel(djf_year=year)
+        fig, ax = plt.subplots()
+        selected_year_data.plot(ax=ax)
+        st.pyplot(fig)
+
+
+        # Step 6: Interactive year selection and plotting
+        ens = st.slider("Select Ensemble", int(0), int(49))
+        selected_ensemble = forecast_djf_median_sums.sel(ensemble=ens)
+        fig, ax = plt.subplots()
+        selected_ensemble.plot(ax=ax)
+        st.pyplot(fig)
+        # Add more functionality as needed
+        # Interactive Ensemble Selection
+        #ens1 = st.slider("Select Ensemble", 0, 49)
+        #selected_ensemble = forecast_djf_median_sums.sel(ensemble=ens)
+    
+        # Plotting selected ensemble
+        fig = px.imshow(selected_ensemble, 
+                        labels=dict(x="Longitude", y="Latitude", color="Value"),
+                        x=selected_ensemble.lon,
+                        y=selected_ensemble.lat)
+        fig.update_traces(hoverinfo='x+y+z', showscale=True)
+        st.plotly_chart(fig, use_container_width=True)
+    
+        # Interactive Click to display value and plot boxplot
+        # Note: Due to limitations in streamlit's direct integration with interactive clicks on plotly maps,
+        # the actual interaction to display values and plot a boxplot on click would need a different approach.
+        # Consider providing instructions to the user to select a specific longitude and latitude from dropdowns or sliders
+        # and then use those to plot the boxplot.
+    
+        lon_1 = st.select_slider('Select Longitude', options=selected_ensemble.lon.values)
+        lat_1 = st.select_slider('Select Latitude', options=selected_ensemble.lat.values)
+
+
+
+        
+        # Extracting values for the selected pixel across all ensembles
+        pixel_values = forecast_djf_median_sums.sel(lon=lon_1, lat=lat_1, method="nearest")
+      # Plotting a boxplot of the selected pixel across all ensembles
+        fig = px.box(pixel_values.to_dataframe().reset_index(), y="precipitation")
+
+
+        
+        lower_tercile_value =lower_tercile.sel(lon=lon_1, lat=lat_1, method="nearest").item()
+        
+        st.write(int(lower_tercile_value))
+
+        # Add a horizontal line for the lower_tercile_value
+        # Add a horizontal line for the lower_tercile_value with adjusted properties
+        fig.add_trace(go.Scatter(x=[0, 1], y=[lower_tercile_value, lower_tercile_value], mode="lines",
+                                 name="Lower Tercile", line=dict(color="FireBrick", width=4, dash='dash')))
+             
+        # Annotate the lower_tercile_value on the plot
+        fig.add_annotation(x=1.0, xref="paper", y=lower_tercile_value, text=f"Lower Tercile: {lower_tercile_value}",
+                              showarrow=True, arrowhead=1, ax=0, ay=-40)
+
+
+
+
+        # Plotting a boxplot of the selected pixel across all ensembles
+        #fig = px.box(pixel_values.to_dataframe().reset_index(), y="precipitation")
+
+
+
+    
+
+        st.plotly_chart(fig, use_container_width=True)
+    else:
+        st.write("Please generate synthetic data.")
 
 if __name__ == "__main__":
     main()
