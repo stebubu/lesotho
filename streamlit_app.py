@@ -160,29 +160,29 @@ def main():
     n_ensembles = 50
 
 
-    # Step 1: Upload and process historical data
-    """historical_file = st.file_uploader("Upload historical netCDF", type=["nc"], key="historical")
-    if historical_file is not None:
-        st.success("Historical data uploaded successfully.")
-        historical_data = load_netcdf(historical_file)
-        # Perform operations with historical_data...
-        st.write("Historical data processed.")
+    # Step 0: Upload and process historical data -Optional
+#    historical_file = st.file_uploader("Upload historical netCDF", type=["nc"], key="historical")
+#    if historical_file is not None:
+#         st.success("Historical data uploaded successfully.")
+#         historical_data = load_netcdf(historical_file)
+#         # Perform operations with historical_data...
+#         st.write("Historical data processed.")
 
         # After historical data is uploaded and processed, allow forecast data upload
         # Step 2: Upload and process forecast data
-        forecast_file = st.file_uploader("Upload forecast netCDF for 2023", type=["nc"], key="forecast")
-        if forecast_file is not None:
-            st.success("Forecast data uploaded successfully.")
-            forecast_data = load_netcdf(forecast_file)
-            # Perform operations with forecast_data...
-            st.write("Forecast data processed.")
-            # Here you can add additional steps, such as visualizations or calculations,
-            # that depend on both historical and forecast data.
+ #        forecast_file = st.file_uploader("Upload forecast netCDF for 2023", type=["nc"], key="forecast")
+ #        if forecast_file is not None:
+ #            st.success("Forecast data uploaded successfully.")
+ #           forecast_data = load_netcdf(forecast_file)
+ #            # Perform operations with forecast_data...
+ #            st.write("Forecast data processed.")
+ #            # Here you can add additional steps, such as visualizations or calculations,
+ #            # that depend on both historical and forecast data.
 
             # Assuming 'precipitation' variable exists; adjust as necessary
-            historical_precip_da = historical_data['precipitation']
-            forecast_precip_da = forecast_data['precipitation']"""
-
+ #            historical_precip_da = historical_data['precipitation']
+ #            forecast_precip_da = forecast_data['precipitation']
+# Step 1: enerate Synthetic Data
     if st.button('Generate Synthetic Data'):
         historical_data, forecast_data = generate_synthetic_data()
         st.session_state['historical_data'] = historical_data
@@ -199,10 +199,7 @@ def main():
 
 
         event_threshold = historical_djf_sum.quantile(0.2)
-        # Step 2: Determine Terciles for Historical Data
-        #lower_tercile = historical_djf_sum.quantile(0.33, dim="time")
-        #upper_tercile = historical_djf_sum.quantile(0.67, dim="time")
-        
+        # Step 2: Determine Terciles for Historical Data        
         lower_tercile = historical_djf_sum.quantile(0.33, dim="djf_year")
         upper_tercile = historical_djf_sum.quantile(0.67, dim="djf_year")
 
