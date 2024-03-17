@@ -85,7 +85,7 @@ def main():
                             labels=dict(x="Longitude", y="Latitude", color="Probability"),
                             x=below_normal_probability.lon,
                             y=below_normal_probability.lat,
-                            color_continuous_scale=custom_color_scale)
+                            color_continuous_scale=color_scale)
             
         fig.update_traces(hoverinfo='x+y+z', showscale=True)
         st.plotly_chart(fig, use_container_width=True)            
