@@ -9,6 +9,32 @@ import tempfile
 import plotly.express as px
 import plotly.graph_objects as go
 
+# Function to generate synthetic data
+def generate_synthetic_data():
+    # Seed for reproducibility
+    np.random.seed(0)
+
+    # Grid and timeframe setup
+    n_rows, n_cols = 25, 25
+    start_date, end_date = "1990-01-01", "2022-12-31"
+    forecast_start, forecast_end = "2023-01-01", "2023-12-31"
+
+    # Generate synthetic historical and forecast precipitation data
+    historical_dates = pd.date_range(start_date, end_date)
+    forecast_dates = pd.date_range(forecast_start, forecast_end)
+
+    historical_precip = np.random.uniform(0, 100, (len(historical_dates), n_rows, n_cols))
+    n_ensembles = 50  # Number of ensemble members
+    forecast_precip = np.random.uniform(0, 98, (n_ensembles, len(forecast_dates), n_rows, n_cols))
+
+    # Convert to xarray DataArrays for easier handling
+    historical_precip_da = xr.DataArray(historical_precip, coords=[historical_dates, np.linspace(-25, 25, n_rows), np.linspace(-25, 25, n_cols)], dims=["time", "lat", "lon"], name='precipitation')
+    forecast_precip_da = xr.DataArray(forecast_precip, coords=[np.arange(n_ensembles), forecast_dates, np.linspace(-25, 25, n_rows), np.linspace(-25, 25, n_cols)], dims=["ensemble", "time", "lat", "lon"], name='precipitation')
+    
+    return historical_precip_da, forecast_precip_da
+
+
+
 def calculate_djf_sum(data_array):
     # Create a new 'year' coordinate for grouping, shifting December to the next year
     year_shifted = data_array.time.dt.year + (data_array.time.dt.month == 12)
@@ -144,7 +170,7 @@ def main():
 
         # After historical data is uploaded and processed, allow forecast data upload
         # Step 2: Upload and process forecast data
-        forecast_file = st.file_uploader("Upload forecast netCDF for 2023", type=["nc"], key="forecast")
+        '''forecast_file = st.file_uploader("Upload forecast netCDF for 2023", type=["nc"], key="forecast")
         if forecast_file is not None:
             st.success("Forecast data uploaded successfully.")
             forecast_data = load_netcdf(forecast_file)
@@ -155,7 +181,9 @@ def main():
 
             # Assuming 'precipitation' variable exists; adjust as necessary
             historical_precip_da = historical_data['precipitation']
-            forecast_precip_da = forecast_data['precipitation']
+            forecast_precip_da = forecast_data['precipitation']'''
+        if st.button('Generate Synthetic Data'):
+            historical_precip_da, forecast_precip_da = generate_synthetic_data()
 
             historical_djf_sum = calculate_djf_sum(historical_precip_da)
 
