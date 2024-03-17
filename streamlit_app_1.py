@@ -78,7 +78,7 @@ def main():
 
         # Visualize Below-Normal Probability
         st.header("Below-Normal Probability")
-        color_scale = prepare_custom_colormap()
+        #color_scale = prepare_custom_colormap()
         fig = px.imshow(below_normal_probability, color_continuous_scale=color_scale, labels={'color': 'Probability'}, aspect='auto')
         st.plotly_chart(fig)
 
