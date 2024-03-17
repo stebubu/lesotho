@@ -291,7 +291,7 @@ def main():
 
 
             # Plotting a boxplot of the selected pixel across all ensembles
-            fig = px.box(pixel_values.to_dataframe().reset_index(), y="precipitation")
+            #fig = px.box(pixel_values.to_dataframe().reset_index(), y="precipitation")
 
 
 
