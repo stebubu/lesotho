@@ -79,9 +79,19 @@ def main():
         (0.33, "red"), # transition to red by 0.33
         (0.33, "green"),  # immediately switch to green at 0.33
         (1, "green")   # end with green at 1
-    ]
-        fig = px.imshow(below_normal_probability, color_continuous_scale=color_scale, labels={'color': 'Probability'}, aspect='auto')
-        st.plotly_chart(fig)
+        ]
+        # Plotting below_normal_probability_forecast with custom color scale
+        fig = px.imshow(below_normal_probability_forecast, 
+                            labels=dict(x="Longitude", y="Latitude", color="Probability"),
+                            x=below_normal_probability_forecast.lon,
+                            y=below_normal_probability_forecast.lat,
+                            color_continuous_scale=custom_color_scale)
+            
+        fig.update_traces(hoverinfo='x+y+z', showscale=True)
+        st.plotly_chart(fig, use_container_width=True)            
+           
+        #fig = px.imshow(below_normal_probability, color_continuous_scale=color_scale, labels={'color': 'Probability'}, aspect='auto')
+        #st.plotly_chart(fig)
 
         # Step 5: Interactive Visualization of Forecast Data
         ensemble_selection = st.selectbox("Select Ensemble", forecast_djf_sum.ensemble.values)
