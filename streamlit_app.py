@@ -246,6 +246,8 @@ def main():
                         labels=dict(x="Longitude", y="Latitude", color="lower_tercile"),
                         x=lower_tercile.lon,
                         y=lower_tercile.lat)
+        # Reverse the y-axis (latitude) to display negative values on the bottom
+        fig.update_yaxes(autorange="reversed")
         
         fig.update_traces(hoverinfo='x+y+z', showscale=True)
         st.plotly_chart(fig, use_container_width=True)            
