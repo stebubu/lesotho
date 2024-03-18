@@ -232,6 +232,8 @@ def main():
         ]
         
         # Plotting below_normal_probability_forecast with custom color scale
+        below_normal_probability_forecast = below_normal_probability_forecast.sortby('lat', ascending=False)
+
         fig = px.imshow(below_normal_probability_forecast, 
                         labels=dict(x="Longitude", y="Latitude", color="Probability"),
                         x=below_normal_probability_forecast.lon,
