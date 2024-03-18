@@ -226,7 +226,7 @@ def main():
         # Create a custom color scale
         custom_color_scale = [
             [0, "red"],  # Values normalized to 0 will be red
-            [0.32, "red"],  # Up to 0.33, also red
+            [0.33, "red"],  # Up to 0.33, also red
             [0.34, "green"],  # Values normalized exactly at 0.33 will be an abrupt change to green
             [1, "green"]  # Up to the maximum normalized value (1), will be green
         ]
