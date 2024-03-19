@@ -225,6 +225,7 @@ def main():
         precipitation_data = precipitation_data.rename('precipitation')
         daily_precipitation = precipitation_data.resample(time='D').sum()
         historical_djf_sum = calculate_djf_sum(daily_precipitation)
+        historical_djf_sum = historical_djf_sum.chunk({'djf_year': -1})
         lower_tercile = historical_djf_sum.quantile(0.33, dim="djf_year")
         upper_tercile = historical_djf_sum.quantile(0.67, dim="djf_year")
          # Plotting lower tercilet with custom color scale
