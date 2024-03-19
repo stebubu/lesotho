@@ -250,7 +250,7 @@ def main():
         my_map = folium.Map(location=map_center, zoom_start=5, tiles="OpenStreetMap")  
  
         folium.raster_layers.ImageOverlay(
-            image=lower_tercile.data.values,
+            image=lower_tercile.values,
             bounds=[[lower_tercile.lat.min(), lower_tercile.lat.min()],
                     [lower_tercile.lon.max(), lower_tercile.lon.max()]]
         ).add_to(my_map)
