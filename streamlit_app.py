@@ -245,6 +245,10 @@ def main():
         
         
         # Add raster layer using xarray and Folium integration (might need additional libraries)
+        # Create a basic Folium map
+        map_center = [lower_tercile.lat.mean(), lower_tercile.lon.mean()]
+        my_map = folium.Map(location=map_center, zoom_start=5, tiles="OpenStreetMap")  
+
         folium.raster_layers.ImageOverlay(
             image=lower_tercile,
             bounds=[[lower_tercile.lat.min(), lower_tercile.lat.min()],
