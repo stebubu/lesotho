@@ -224,6 +224,7 @@ def main():
         precipitation_data = fetch_rain_bbox(varname_Rain, factor, location, start_date, end_date)
         precipitation_data = precipitation_data.rename('precipitation')
         daily_precipitation = precipitation_data.resample(time='D').sum()
+        historical_djf_sum = calculate_djf_sum(daily_precipitation)
         
         
 
@@ -272,8 +273,6 @@ def main():
     if 'historical_data' in st.session_state and 'forecast_data' in st.session_state:
 
         historical_precip_da, forecast_precip_da = generate_synthetic_data()
-        if daily_precipitation is not None:
-            historical_precip_da=daily_precipitation
 
 
         historical_djf_sum = calculate_djf_sum(historical_precip_da)
