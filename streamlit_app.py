@@ -12,7 +12,7 @@ from datetime import datetime, timedelta
 import pystac_client
 import planetary_computer
 import geopandas as gpd
-import folium
+from streamlit_folium import st_folium
 
 
 # Function to generate synthetic data
@@ -256,7 +256,7 @@ def main():
         ).add_to(my_map)
         
         # Display in Streamlit
-        st.folium(my_map, width=700)
+        st_folium(my_map, width=700)
         
        
         
