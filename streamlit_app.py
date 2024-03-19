@@ -239,18 +239,19 @@ def main():
         st.plotly_chart(fig, use_container_width=True)  
 
         # Convert to GeoDataFrame (if necessary)
-        if not isinstance(lower_tercile, gpd.GeoDataFrame):
-            tercile_gdf = gpd.GeoDataFrame(lower_tercile, geometry=gpd.points_from_xy(lower_tercile.lon, lower_tercile.lat))
+        # Plot with Mapbox overlay
+        fig = px.imshow(lower_tercile, 
+                        x=lower_tercile.lon, 
+                        y=lower_tercile.lat, 
+                        labels=dict(x="Longitude", y="Latitude", color="lower_tercile"))
         
-        # Base map layer (optional)
-        fig = px.scatter_mapbox(tercile_gdf, lat="lat", lon="long", color="lower_tercile")
-                                # ... other Plotly arguments for customization ... )
-        fig.update_layout(mapbox_style="open-street-map") # Or other styles
+        # Add Mapbox layer 
+        fig.update_layout(
+            mapbox_style="satellite-streets",  # Choose your map style
+            mapbox_accesstoken=pk.eyJ1Ijoic3RlYnVidSIsImEiOiJjbHR5dzNjOHcwazJ4MmtxbTk2NjllMWc4In0.b-MBJueaRNhUGotwAbbLDA
+        )
         
-        # Customize color scale, hoverinfo, etc.
-        fig.update_traces(hoverinfo='x+y+z', showscale=True) 
-        
-        st.plotly_chart(fig, use_container_width=True) 
+        fig.show()
         
         
 
