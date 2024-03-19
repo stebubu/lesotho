@@ -181,7 +181,7 @@ def fetch_rain_bbox(varname, factor, location, start_date, end_date):
             collections=["era5-pds"], datetime=[current_month_start.isoformat(), current_month_end.isoformat()], query={"era5:kind": {"eq": "fc"}}
         )
 
-        items = list(search_results.get_items())
+        items = list(search_results.items())
         for item in items:
             signed_item = planetary_computer.sign(item)
             asset = signed_item.assets.get(varname)
@@ -190,7 +190,7 @@ def fetch_rain_bbox(varname, factor, location, start_date, end_date):
                 wind_ds = dataset[varname]
                 interval = 0.25
                 rounded_coord = round_coordinates(location, interval)
-                wind_ds_sliced = wind_ds.sel(lat=slice(rounded_coord[0], rounded_coord[1]), lon=slice(rounded_coord[2], rounded_coord[3])) * factor
+                wind_ds_sliced = wind_ds.sel(lat=slice(rounded_coord[1], rounded_coord[0]), lon=slice(rounded_coord[2], rounded_coord[3])) * factor
                 monthly_dataarrays.append(wind_ds_sliced)
         
         current_month_start = next_month_start
