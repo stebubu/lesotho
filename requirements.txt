@@ -9,4 +9,4 @@ adlfs
 dask
 geopandas
 folium
-streamlit_folium
+streamlit-folium
