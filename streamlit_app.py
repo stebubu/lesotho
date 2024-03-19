@@ -274,6 +274,8 @@ def main():
     if 'historical_data' in st.session_state and 'forecast_data' in st.session_state:
 
         historical_precip_da, forecast_precip_da = generate_synthetic_data()
+        if daily_precipitation is not None: 
+            historical_precip_da=daily_precipitation
 
 
         historical_djf_sum = calculate_djf_sum(historical_precip_da)
