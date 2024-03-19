@@ -8,3 +8,4 @@ zarr
 adlfs
 dask
 geopandas
+folium
