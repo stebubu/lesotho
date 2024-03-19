@@ -2,3 +2,6 @@ xarray
 matplotlib
 netCDF4
 plotly
+pystac_client
+planetary_computer
+zarr
