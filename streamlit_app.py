@@ -240,10 +240,10 @@ def main():
 
         # Convert to GeoDataFrame (if necessary)
         if not isinstance(lower_tercile, gpd.GeoDataFrame):
-            tercile_gdf = gpd.GeoDataFrame(lower_tercile, geometry=gpd.points_from_xy(lower_tercile.longitude, lower_tercile.latitude))
+            tercile_gdf = gpd.GeoDataFrame(lower_tercile, geometry=gpd.points_from_xy(lower_tercile.lon, lower_tercile.lat))
         
         # Base map layer (optional)
-        fig = px.scatter_mapbox(tercile_gdf, lat="latitude", lon="longitude", color="tercile_value")
+        fig = px.scatter_mapbox(tercile_gdf, lat="lat", lon="long", color="lower_tercile")
                                 # ... other Plotly arguments for customization ... )
         fig.update_layout(mapbox_style="open-street-map") # Or other styles
         
