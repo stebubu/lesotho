@@ -242,20 +242,10 @@ def main():
         # Plot with Mapbox overlay
         # Mapbox access token
         
-        mapbox_token = st.secrets["mapbox"]["pk.eyJ1Ijoic3RlYnVidSIsImEiOiJjbHR5dzczOXkwaXJrMmttb3loand3dTZyIn0.b9kOVGHZXuqHgSy9qVC51A"]
-        fig = px.imshow(lower_tercile, 
-                        x=lower_tercile.lon, 
-                        y=lower_tercile.lat, 
-                        labels=dict(x="Longitude", y="Latitude", color="lower_tercile"))
         
-        # Add Mapbox layer 
-        fig.update_layout(
-            mapbox_style="satellite-streets",  # Choose your map style
-            mapbox_accesstoken=mapbox_token
-        )
+        st.map(lower_tercile, size=20, color='#0044ff')
         
-        # Display the Plotly chart in Streamlit
-        st.plotly_chart(fig, use_container_width=True)
+       
         
         
 
