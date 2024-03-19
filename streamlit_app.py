@@ -240,6 +240,9 @@ def main():
 
         # Convert to GeoDataFrame (if necessary)
         # Plot with Mapbox overlay
+        # Mapbox access token
+        mapbox_token = st.secrets["pk.eyJ1Ijoic3RlYnVidSIsImEiOiJjbHR5dzczOXkwaXJrMmttb3loand3dTZyIn0.b9kOVGHZXuqHgSy9qVC51A"]  # Recommended way
+
         fig = px.imshow(lower_tercile, 
                         x=lower_tercile.lon, 
                         y=lower_tercile.lat, 
@@ -248,7 +251,7 @@ def main():
         # Add Mapbox layer 
         fig.update_layout(
             mapbox_style="satellite-streets",  # Choose your map style
-            mapbox_accesstoken='pk.eyJ1Ijoic3RlYnVidSIsImEiOiJjbHR5dzczOXkwaXJrMmttb3loand3dTZyIn0.b9kOVGHZXuqHgSy9qVC51A'
+            mapbox_accesstoken=mapbox_token
         )
         
         # Display the Plotly chart in Streamlit
