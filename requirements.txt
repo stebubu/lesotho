@@ -7,3 +7,4 @@ planetary_computer
 zarr
 adlfs
 dask
+geopandas
