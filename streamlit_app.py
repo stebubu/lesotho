@@ -12,6 +12,7 @@ from datetime import datetime, timedelta
 import pystac_client
 import planetary_computer
 import geopandas as gpd
+import folium
 
 
 # Function to generate synthetic data
@@ -243,7 +244,15 @@ def main():
         # Mapbox access token
         
         
-        st.map(lower_tercile, size=20, color='#0044ff')
+        # Add raster layer using xarray and Folium integration (might need additional libraries)
+        folium.raster_layers.ImageOverlay(
+            image=lower_tercile,
+            bounds=[[lower_tercile.lat.min(), lower_tercile.lat.min()],
+                    [lower_tercile.lon.max(), lower_tercile.lon.max()]]
+        ).add_to(my_map)
+        
+        # Display in Streamlit
+        st.folium(my_map, width=700)
         
        
         
