@@ -186,7 +186,7 @@ def fetch_rain_bbox(varname, factor, location, start_date, end_date):
             signed_item = planetary_computer.sign(item)
             asset = signed_item.assets.get(varname)
             if asset:
-                dataset = xr.open_dataset(asset.href, **asset.extra_fields["xarray:open_kwargs"])
+                dataset = xr.open_dataset(asset.href,chunks=None, **asset.extra_fields["xarray:open_kwargs"])
                 wind_ds = dataset[varname]
                 interval = 0.25
                 rounded_coord = round_coordinates(location, interval)
