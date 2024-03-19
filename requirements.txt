@@ -5,3 +5,4 @@ plotly
 pystac_client
 planetary_computer
 zarr
+adlfs
