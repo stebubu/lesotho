@@ -223,7 +223,8 @@ def main():
     if st.button("Fetch ERA5 Precipitation Data"):
         precipitation_data = fetch_rain_bbox(varname_Rain, factor, location, start_date, end_date)
         if precipitation_data is not None:
-            st.write(precipitation_data)
+            
+            daily_precipitation = precipitation_data.resample(time='D').sum()
             # Add additional code here to allow downloading of precipitation_data
         else:
             st.error("Failed to fetch data.")
