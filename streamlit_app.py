@@ -248,7 +248,7 @@ def main():
         # Add Mapbox layer 
         fig.update_layout(
             mapbox_style="satellite-streets",  # Choose your map style
-            mapbox_accesstoken=pk.eyJ1Ijoic3RlYnVidSIsImEiOiJjbHR5dzNjOHcwazJ4MmtxbTk2NjllMWc4In0.b-MBJueaRNhUGotwAbbLDA
+            mapbox_accesstoken='pk.eyJ1Ijoic3RlYnVidSIsImEiOiJjbHR5dzczOXkwaXJrMmttb3loand3dTZyIn0.b9kOVGHZXuqHgSy9qVC51A'
         )
         
         fig.show()
