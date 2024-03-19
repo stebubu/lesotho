@@ -251,7 +251,8 @@ def main():
             mapbox_accesstoken='pk.eyJ1Ijoic3RlYnVidSIsImEiOiJjbHR5dzczOXkwaXJrMmttb3loand3dTZyIn0.b9kOVGHZXuqHgSy9qVC51A'
         )
         
-        fig.show()
+        # Display the Plotly chart in Streamlit
+        st.plotly_chart(fig, use_container_width=True)
         
         
 
