@@ -244,7 +244,7 @@ def main():
         # Mapbox access token
         
         
-        # Add raster layer using xarray and Folium integration (might need additional libraries)
+        '''# Add raster layer using xarray and Folium integration (might need additional libraries)
         # Create a basic Folium map
         map_center = [lower_tercile.lat.mean(), lower_tercile.lon.mean()]
         my_map = folium.Map(location=map_center, zoom_start=5, tiles="OpenStreetMap")  
@@ -256,7 +256,7 @@ def main():
         ).add_to(my_map)
         
         # Display in Streamlit
-        st_folium(my_map, width=700)
+        st_folium(my_map, width=700)'''
         
        
         
