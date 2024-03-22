@@ -216,9 +216,11 @@ def main():
     
     lat_min = st.number_input("Latitude Min:", value=-31.0)
     lat_max = st.number_input("Latitude Max:", value=-29.0)
-    lon_min = st.number_input("Longitude Min:", value=26.5)
-    lon_max = st.number_input("Longitude Max:", value=29.5)
+    lon_min = st.number_input("Longitude Min:", value=26.0)
+    lon_max = st.number_input("Longitude Max:", value=29.0)
     location = [lat_min, lat_max, lon_min, lon_max]
+    location1 = [lon_min, lat_mim, lon_max, lat_max]
+    location_str = ', '.join(map(str, location1))
 
     var_ERA5 = st.selectbox( "ERA5variable", ('precipitation_amount_1hour_Accumulation', 'air_temperature_at_2_metres_1hour_Maximum', 'air_temperature_at_2_metres_1hour_Minimum','eastward_wind_at_10_metres','northward_wind_at_10_metres'),
                             index=None,placeholder="Select Variable.",)
@@ -227,7 +229,7 @@ def main():
            # Format the dates as strings in the desired format
         start_date_str = start_date.strftime('%d-%m-%Y')
         end_date_str = end_date.strftime('%d-%m-%Y')  
-        data_ERA5 = fetch_var(varname=var_ERA5,start_date=start_date_str,end_date=end_date_str,factor=1000,bbox="26,-31,29,-29",query={"era5:kind": {"eq": "fc"}})
+        data_ERA5 = fetch_var(varname=var_ERA5,start_date=start_date_str,end_date=end_date_str,factor=1000,bbox=location_str,query={"era5:kind": {"eq": "fc"}})
         data_ERA5_sum=data_ERA5.sum(dim='time')
         fig = px.imshow(data_ERA5_sum, 
                         labels=dict(x="Longitude", y="Latitude", color="sum year"),
