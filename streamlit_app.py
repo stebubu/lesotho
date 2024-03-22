@@ -229,10 +229,10 @@ def main():
         end_date_str = end_date.strftime('%d-%m-%Y')  
         data_ERA5 = fetch_var(varname=var_ERA5,start_date=start_date_str,end_date=end_date_str,bbox="26,-31,29,-29",query={"era5:kind": {"eq": "fc"}})
         data_ERA5_sum=data_ERA5.sum(dim='time')
-        fig = px.imshow(data_ERA5, 
+        fig = px.imshow(data_ERA5_sum, 
                         labels=dict(x="Longitude", y="Latitude", color="lower_tercile"),
-                        x=data_ERA5.lon,
-                        y=data_ERA5.lat)
+                        x=data_ERA5_sum.lon,
+                        y=data_ERA5_sum.lat)
         
         fig.update_traces(hoverinfo='x+y+z', showscale=True)
         st.plotly_chart(fig, use_container_width=True)          
