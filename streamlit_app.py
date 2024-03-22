@@ -228,6 +228,7 @@ def main():
         start_date_str = start_date.strftime('%d-%m-%Y')
         end_date_str = end_date.strftime('%d-%m-%Y')  
         data_ERA5 = fetch_var(varname=var_ERA5,start_date=start_date_str,end_date=end_date_str,bbox="26,-31,29,-29",query={"era5:kind": {"eq": "fc"}})
+        data_ERA5_sum=data_ERA5.sum(dim='time')
         fig = px.imshow(data_ERA5, 
                         labels=dict(x="Longitude", y="Latitude", color="lower_tercile"),
                         x=data_ERA5.lon,
