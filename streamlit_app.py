@@ -12,7 +12,9 @@ from datetime import datetime, timedelta
 import pystac_client
 import planetary_computer
 import geopandas as gpd
-from streamlit_folium import st_folium
+from climate_eed import fetch_var 
+
+
 
 
 # Function to generate synthetic data
@@ -217,6 +219,23 @@ def main():
     lon_min = st.number_input("Longitude Min:", value=26.5)
     lon_max = st.number_input("Longitude Max:", value=29.5)
     location = [lat_min, lat_max, lon_min, lon_max]
+
+    var_ERA5 = st.selectbox( "ERA5variable", ('precipitation_amount_1hour_Accumulation', 'air_temperature_at_2_metres_1hour_Maximum', 'air_temperature_at_2_metres_1hour_Minimum','eastward_wind_at_10_metres','northward_wind_at_10_metres'),
+                            index=None,placeholder="Select Variable.",)
+    if st.button("Fetch ERA5  Data"):
+        data_ERA5 = fetch_var(varname="precipitation_amount_1hour_Accumulation",start_date="01-01-1995",end_date="31-12-1995",bbox="26,-31,29,-29",query={"era5:kind": {"eq": "fc"}})
+        fig = px.imshow(data_ERA5, 
+                        labels=dict(x="Longitude", y="Latitude", color="lower_tercile"),
+                        x=data_ERA5.lon,
+                        y=data_ERA5.lat)
+        
+        fig.update_traces(hoverinfo='x+y+z', showscale=True)
+        st.plotly_chart(fig, use_container_width=True)          
+
+
+
+
+    st.write('You selected:', option)
     
     varname_Rain = "precipitation_amount_1hour_Accumulation"
     factor = 1  # Adjust the factor as necessary
@@ -244,19 +263,7 @@ def main():
         # Mapbox access token
         
         
-        '''# Add raster layer using xarray and Folium integration (might need additional libraries)
-        # Create a basic Folium map
-        map_center = [lower_tercile.lat.mean(), lower_tercile.lon.mean()]
-        my_map = folium.Map(location=map_center, zoom_start=5, tiles="OpenStreetMap")  
- 
-        folium.raster_layers.ImageOverlay(
-            image=lower_tercile.values,
-            bounds=[[lower_tercile.lat.min(), lower_tercile.lat.min()],
-                    [lower_tercile.lon.max(), lower_tercile.lon.max()]]
-        ).add_to(my_map)
-        
-        # Display in Streamlit
-        st_folium(my_map, width=700)'''
+      
         
        
         
