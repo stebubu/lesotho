@@ -224,9 +224,10 @@ def main():
                             index=None,placeholder="Select Variable.",)
     st.write('You selected:', var_ERA5)
     if st.button("Fetch ERA5  Data"):
-        formatted_startdate = start_date.strftime('%m-%d-%Y')
-        formatted_enddate = end_date.strftime('%m-%d-%Y')        
-        data_ERA5 = fetch_var(varname=var_ERA5,start_date=formatted_startdate,end_date=formatted_enddate,bbox="26,-31,29,-29",query={"era5:kind": {"eq": "fc"}})
+           # Format the dates as strings in the desired format
+        start_date_str = start_date.strftime('%d-%m-%Y')
+        end_date_str = end_date.strftime('%d-%m-%Y')  
+        data_ERA5 = fetch_var(varname=var_ERA5,start_date=start_date_str,end_date=end_date_str,bbox="26,-31,29,-29",query={"era5:kind": {"eq": "fc"}})
         fig = px.imshow(data_ERA5, 
                         labels=dict(x="Longitude", y="Latitude", color="lower_tercile"),
                         x=data_ERA5.lon,
