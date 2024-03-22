@@ -221,6 +221,7 @@ def main():
     location = [lat_min, lat_max, lon_min, lon_max]
     location1 = [lon_min, lat_min, lon_max, lat_max]
     location_str = ', '.join(map(str, location1))
+    print(location_str)
 
     var_ERA5 = st.selectbox( "ERA5variable", ('precipitation_amount_1hour_Accumulation', 'air_temperature_at_2_metres_1hour_Maximum', 'air_temperature_at_2_metres_1hour_Minimum','eastward_wind_at_10_metres','northward_wind_at_10_metres'),
                             index=None,placeholder="Select Variable.",)
