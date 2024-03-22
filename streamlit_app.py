@@ -206,7 +206,13 @@ def fetch_rain_bbox(varname, factor, location, start_date, end_date):
     else:
         return None
 
-
+def convert_to_netcdf(data_era5):
+    # Create a temporary directory to save the file
+    if not os.path.exists('tmp'):
+        os.makedirs('tmp')
+    filepath = os.path.join('tmp', 'era5_data.nc')
+    data_era5.to_netcdf(path=filepath)
+    return filepath
 
 def main():
     # Streamlit interface for inputs
@@ -231,6 +237,17 @@ def main():
         start_date_str = start_date.strftime('%d-%m-%Y')
         end_date_str = end_date.strftime('%d-%m-%Y')  
         data_ERA5 = fetch_var(varname=var_ERA5,start_date=start_date_str,end_date=end_date_str,factor=1000,bbox=location_str,query={"era5:kind": {"eq": "fc"}})
+        netcdf_file_path = convert_to_netcdf(data_ERA5)
+
+        # Read the netCDF file and create a download button
+        with open(netcdf_file_path, "rb") as file:
+            btn = st.download_button(
+                label="Download ERA5 Data as netCDF",
+                data=file,
+                file_name="era5_data.nc",
+                mime="application/x-netcdf"
+            )
+        
         data_ERA5_sum=data_ERA5.sum(dim='time')
         fig = px.imshow(data_ERA5_sum, 
                         labels=dict(x="Longitude", y="Latitude", color="sum year"),
