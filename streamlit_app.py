@@ -224,7 +224,7 @@ def main():
                             index=None,placeholder="Select Variable.",)
     st.write('You selected:', var_ERA5)
     if st.button("Fetch ERA5  Data"):
-        data_ERA5 = fetch_var(varname="precipitation_amount_1hour_Accumulation",start_date="01-01-1995",end_date="31-12-1995",bbox="26,-31,29,-29",query={"era5:kind": {"eq": "fc"}})
+        data_ERA5 = fetch_var(varname=var_ERA5,start_date=start_date,end_date=end_date,bbox="26,-31,29,-29",query={"era5:kind": {"eq": "fc"}})
         fig = px.imshow(data_ERA5, 
                         labels=dict(x="Longitude", y="Latitude", color="lower_tercile"),
                         x=data_ERA5.lon,
