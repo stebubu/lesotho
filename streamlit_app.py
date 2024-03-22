@@ -219,7 +219,7 @@ def main():
     lon_min = st.number_input("Longitude Min:", value=26.0)
     lon_max = st.number_input("Longitude Max:", value=29.0)
     location = [lat_min, lat_max, lon_min, lon_max]
-    location1 = [lon_min, lat_mim, lon_max, lat_max]
+    location1 = [lon_min, lat_min, lon_max, lat_max]
     location_str = ', '.join(map(str, location1))
 
     var_ERA5 = st.selectbox( "ERA5variable", ('precipitation_amount_1hour_Accumulation', 'air_temperature_at_2_metres_1hour_Maximum', 'air_temperature_at_2_metres_1hour_Minimum','eastward_wind_at_10_metres','northward_wind_at_10_metres'),
