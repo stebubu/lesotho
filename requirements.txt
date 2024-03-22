@@ -10,3 +10,4 @@ dask
 geopandas
 folium
 streamlit-folium
+git+https://github.com/SaferPlaces2023/climate_eed
