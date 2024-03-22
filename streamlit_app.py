@@ -232,11 +232,15 @@ def main():
     var_ERA5 = st.selectbox( "ERA5variable", ('precipitation_amount_1hour_Accumulation', 'air_temperature_at_2_metres_1hour_Maximum', 'air_temperature_at_2_metres_1hour_Minimum','eastward_wind_at_10_metres','northward_wind_at_10_metres'),
                             index=None,placeholder="Select Variable.",)
     st.write('You selected:', var_ERA5)
+    if var_ERA5=='precipitation_amount_1hour_Accumulation':
+        factor_sel=1000
+    else:
+        factor_sel=1
     if st.button("Fetch ERA5  Data"):
            # Format the dates as strings in the desired format
         start_date_str = start_date.strftime('%d-%m-%Y')
         end_date_str = end_date.strftime('%d-%m-%Y')  
-        data_ERA5 = fetch_var(varname=var_ERA5,start_date=start_date_str,end_date=end_date_str,factor=1000,bbox=location_str,query={"era5:kind": {"eq": "fc"}})
+        data_ERA5 = fetch_var(varname=var_ERA5,start_date=start_date_str,end_date=end_date_str,factor=factor_sel,bbox=location_str,query={"era5:kind": {"eq": "fc"}})
         netcdf_file_path = convert_to_netcdf(data_ERA5)
 
         # Read the netCDF file and create a download button
