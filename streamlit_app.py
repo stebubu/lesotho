@@ -222,6 +222,7 @@ def main():
 
     var_ERA5 = st.selectbox( "ERA5variable", ('precipitation_amount_1hour_Accumulation', 'air_temperature_at_2_metres_1hour_Maximum', 'air_temperature_at_2_metres_1hour_Minimum','eastward_wind_at_10_metres','northward_wind_at_10_metres'),
                             index=None,placeholder="Select Variable.",)
+    st.write('You selected:', var_ERA5)
     if st.button("Fetch ERA5  Data"):
         data_ERA5 = fetch_var(varname="precipitation_amount_1hour_Accumulation",start_date="01-01-1995",end_date="31-12-1995",bbox="26,-31,29,-29",query={"era5:kind": {"eq": "fc"}})
         fig = px.imshow(data_ERA5, 
@@ -235,7 +236,7 @@ def main():
 
 
 
-    st.write('You selected:', option)
+   
     
     varname_Rain = "precipitation_amount_1hour_Accumulation"
     factor = 1  # Adjust the factor as necessary
