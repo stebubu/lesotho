@@ -238,8 +238,8 @@ def main():
         factor_sel=1
     if st.button("Fetch ERA5  Data"):
            # Format the dates as strings in the desired format
-        start_date_str = start_date.strftime('%d-%m-%Y')
-        end_date_str = end_date.strftime('%d-%m-%Y')  
+        start_date_str = start_date#.strftime('%d-%m-%Y')
+        end_date_str = end_date#.strftime('%d-%m-%Y')  
         data_ERA5 = fetch_var(varname=var_ERA5,start_date=start_date_str,end_date=end_date_str,factor=factor_sel,bbox=location_str,query={"era5:kind": {"eq": "fc"}})
         netcdf_file_path = convert_to_netcdf(data_ERA5)
 
