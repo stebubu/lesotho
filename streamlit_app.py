@@ -12,7 +12,7 @@ from datetime import datetime, timedelta
 import pystac_client
 import planetary_computer
 import geopandas as gpd
-from climate_eed import fetch_var 
+from climate_eed import fetch_var_planetary 
 
 
 
