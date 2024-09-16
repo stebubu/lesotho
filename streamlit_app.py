@@ -368,7 +368,7 @@ def main():
 
         # Step 4: Plot probability below normal for forecast
         # Calculate the below-normal probability using the lower_tercile from historical data
-        below_normal_probability_forecast = calculate_below_normal_probability_ensemble(forecast_djf_median_sums, lower_tercile,n_ensembles)
+        below_normal_probability_forecast = calculate_below_normal_probability_ensemble(forecast_djf_median_sums, lower_tercile,n_ensembles)[0]
 
     
         # Custom colormap for probability plot
