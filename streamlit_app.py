@@ -229,9 +229,23 @@ def main():
     location_str = ', '.join(map(str, location1))
     print(location_str)
 
-    var_ERA5 = st.selectbox( "ERA5variable", ('precipitation_amount_1hour_Accumulation', 'air_temperature_at_2_metres_1hour_Maximum', 'air_temperature_at_2_metres_1hour_Minimum','eastward_wind_at_10_metres','northward_wind_at_10_metres'),
-                            index=None,placeholder="Select Variable.",)
-    st.write('You selected:', var_ERA5)
+    #var_ERA5 = st.selectbox( "ERA5variable", ('precipitation_amount_1hour_Accumulation', 'air_temperature_at_2_metres_1hour_Maximum', 'air_temperature_at_2_metres_1hour_Minimum','eastward_wind_at_10_metres','northward_wind_at_10_metres'),
+    #                        index=None,placeholder="Select Variable.",)
+
+    var_ERA5 = st.selectbox(
+    label="Select an ERA5 Variable",
+    options=[
+        'precipitation_amount_1hour_Accumulation', 
+        'air_temperature_at_2_metres_1hour_Maximum', 
+        'air_temperature_at_2_metres_1hour_Minimum',
+        'eastward_wind_at_10_metres', 
+        'northward_wind_at_10_metres'
+    ],
+    index=0,  # Default selection to the first variable
+    help="Choose the variable you wish to analyze from ERA5 data.")
+    st.write(f"Selected variable: {var_ERA5}")
+    
+    #st.write('You selected:', var_ERA5)
     if var_ERA5=='precipitation_amount_1hour_Accumulation':
         factor_sel=1000
     else:
