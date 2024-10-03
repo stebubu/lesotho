@@ -42,7 +42,7 @@ def plot_selected_ensemble(selected_ensemble, lon, lat):
     ax.add_feature(cfeature.BORDERS, linestyle=':', edgecolor='black')  # Add country borders
 
     # Set the map extent to focus on the Lesotho region (approximately 27°E to 29°E and 29.5°S to 30.7°S)
-    ax.set_extent([27, 29, -30.7, -29.5], crs=ccrs.PlateCarree())
+    ax.set_extent([26, 29, -31, -29], crs=ccrs.PlateCarree())
 
     # Add a colorbar to the figure
     cbar = plt.colorbar(im, ax=ax, fraction=0.05, pad=0.04)
@@ -70,8 +70,8 @@ def generate_synthetic_data_lesotho():
     forecast_precip = np.random.uniform(0, 98, (n_ensembles, len(forecast_dates), n_rows, n_cols))
 
     # Set coordinates to match Lesotho's approximate latitude and longitude range
-    lat_values = np.linspace(-30.66, -29.58, n_rows)  # Latitudes from 30.66°S to 29.58°S
-    lon_values = np.linspace(27.0, 29.0, n_cols)      # Longitudes from 27.0°E to 29.0°E
+    lat_values = np.linspace(-31, -29, n_rows)  # Latitudes from 30.66°S to 29.58°S
+    lon_values = np.linspace(26.0, 29.0, n_cols)      # Longitudes from 27.0°E to 29.0°E
 
     # Convert to xarray DataArrays for easier handling
     historical_precip_da = xr.DataArray(historical_precip, coords=[historical_dates, lat_values, lon_values], dims=["time", "lat", "lon"], name='precipitation')
