@@ -98,7 +98,7 @@ def main():
         selected_ensemble_data = forecast_djf_sum.sel(ensemble=ensemble_selection)
 
         st.header(f"Forecast Data for Ensemble {ensemble_selection}")
-        fig = px.imshow(selected_ensemble_data, labels={'color': 'Precipitation'}, aspect='auto')
+        fig = px.imshow(selected_ensemble_data[0], labels={'color': 'Precipitation'}, aspect='auto')
         st.plotly_chart(fig)
 
         # Add more plots as needed...
