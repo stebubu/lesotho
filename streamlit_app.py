@@ -473,7 +473,7 @@ def main():
 
 
         #plot with cartopy
-        fig = plot_selected_ensemble(below_normal_probability_forecast, lon, lat)
+        fig = plot_selected_ensemble(below_normal_probability_forecast, below_normal_probability_forecast.lon, below_normal_probability_forecast.lat)
         st.pyplot(fig)
         
 
