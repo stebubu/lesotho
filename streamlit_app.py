@@ -19,7 +19,34 @@ from climate_eed import fetch_var_planetary
 #world = gpd.read_file(gpd.datasets.get_path('naturalearth_lowres'))
 
 
+# Function to plot the selected ensemble data for the Lesotho region
+def plot_selected_ensemble(selected_ensemble, lon, lat):
+    # Create the figure and map using the Cartopy PlateCarree projection
+    fig, ax = plt.subplots(1, 1, figsize=(10, 6), subplot_kw={'projection': ccrs.PlateCarree()})
 
+    # Plot the data using pcolormesh, transforming to PlateCarree
+    im = ax.pcolormesh(lon, lat, selected_ensemble, cmap='RdBu_r', vmin=0, vmax=1, transform=ccrs.PlateCarree())
+
+    # Set the title
+    ax.set_title('Selected Ensemble Data for Lesotho', fontsize=16)
+
+    # Add latitude/longitude gridlines and coastlines
+    gl = ax.gridlines(draw_labels=True, linewidth=1, color='gray', alpha=0.5, linestyle='--')
+    gl.right_labels = False
+    gl.top_labels = False
+
+    # Add coastlines for reference
+    ax.coastlines(color='black')
+
+    # Set the map extent to focus on the Lesotho region (approximately 27°E to 29°E and 29.5°S to 30.7°S)
+    ax.set_extent([27, 29, -30.7, -29.5], crs=ccrs.PlateCarree())
+
+    # Add a colorbar to the figure
+    cbar = plt.colorbar(im, ax=ax, fraction=0.05, pad=0.04)
+    cbar.set_label('Probability', fontsize=12)
+
+    # Return the figure object
+    return fig
 
 # Function to generate synthetic data for Lesotho
 def generate_synthetic_data_lesotho():
@@ -439,27 +466,23 @@ def main():
  
         fig.update_traces(hoverinfo='x+y+z', showscale=True)
         # Add country borders as a new trace
-        '''fig.add_trace(go.Scattergeo(
-            locationmode='ISO-3',  # Use ISO-3 country codes for border overlay
-            lon=world['geometry'].apply(lambda x: x.centroid.x),
-            lat=world['geometry'].apply(lambda x: x.centroid.y),
-            mode='lines',
-            line=dict(width=1, color='black'),
-            showlegend=False
-        ))
-        
-        # Update figure layout to include map details (optional)
-        fig.update_layout(
-            geo=dict(
-                showcoastlines=True,
-                showcountries=True,
-                countrycolor="black",
-                coastlinecolor="gray",
-            )
-        )'''
+       
 
         
-        st.plotly_chart(fig, use_container_width=True)            
+        st.plotly_chart(fig, use_container_width=True)  
+
+
+        #plot with cartopy
+        fig = plot_selected_ensemble(below_normal_probability_forecast, lon, lat)
+        st.pyplot(fig)
+        
+
+
+
+
+
+
+
         
         # Plotting lower tercilet with custom color scale
         fig = px.imshow(lower_tercile, 
