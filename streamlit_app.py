@@ -15,6 +15,8 @@ import geopandas as gpd
 from climate_eed import fetch_var_planetary 
 
 
+# Load country borders using GeoPandas
+world = gpd.read_file(gpd.datasets.get_path('naturalearth_lowres'))
 
 
 
