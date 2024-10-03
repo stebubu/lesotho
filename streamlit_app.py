@@ -17,9 +17,19 @@ import cartopy.crs as ccrs
 import cartopy.feature as cfeature
 
 
-# Load country borders using GeoPandas
-#world = gpd.read_file(gpd.datasets.get_path('naturalearth_lowres'))
+from matplotlib.colors import LinearSegmentedColormap
 
+# Define a custom color ramp using the provided color scale
+custom_color_scale = [
+    [0, "red"],      # Values from 0 will be red
+    [0.33, "red"],   # Values up to 0.33 will also be red
+    [0.34, "green"], # An abrupt change to green at 0.34
+    [1, "green"]     # Values up to 1 will be green
+]
+
+# Create a custom colormap based on the color scale
+colors = [(0, 'red'), (0.33, 'red'), (0.34, 'green'), (1, 'green')]
+custom_cmap = LinearSegmentedColormap.from_list("custom_cmap", colors)
 
 # Function to plot the selected ensemble data for the Lesotho region
 def plot_selected_ensemble(selected_ensemble, lon, lat):
@@ -27,7 +37,7 @@ def plot_selected_ensemble(selected_ensemble, lon, lat):
     fig, ax = plt.subplots(1, 1, figsize=(10, 6), subplot_kw={'projection': ccrs.PlateCarree()})
 
     # Plot the data using pcolormesh, transforming to PlateCarree
-    im = ax.pcolormesh(lon, lat, selected_ensemble, cmap='RdBu_r', vmin=0, vmax=1, transform=ccrs.PlateCarree())
+    im = ax.pcolormesh(lon, lat, selected_ensemble, cmap=custom_cmap, vmin=0, vmax=1, transform=ccrs.PlateCarree())
 
     # Set the title
     ax.set_title('Selected Ensemble Data for Lesotho', fontsize=16)
