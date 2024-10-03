@@ -14,6 +14,7 @@ import planetary_computer
 import geopandas as gpd
 from climate_eed import fetch_var_planetary 
 import cartopy.crs as ccrs
+import cartopy.feature as cfeature
 
 
 # Load country borders using GeoPandas
