@@ -17,7 +17,39 @@ from climate_eed import fetch_var_planetary
 
 
 
-# Function to generate synthetic data
+
+
+# Function to generate synthetic data for Lesotho
+def generate_synthetic_data_lesotho():
+    # Seed for reproducibility
+    np.random.seed(0)
+
+    # Grid and timeframe setup
+    n_rows, n_cols = 25, 25
+    start_date, end_date = "1990-01-01", "2022-12-31"
+    forecast_start, forecast_end = "2023-01-01", "2023-12-31"
+
+    # Generate synthetic historical and forecast precipitation data
+    historical_dates = pd.date_range(start_date, end_date)
+    forecast_dates = pd.date_range(forecast_start, forecast_end)
+
+    historical_precip = np.random.uniform(0, 100, (len(historical_dates), n_rows, n_cols))
+    n_ensembles = 50  # Number of ensemble members
+    forecast_precip = np.random.uniform(0, 98, (n_ensembles, len(forecast_dates), n_rows, n_cols))
+
+    # Set coordinates to match Lesotho's approximate latitude and longitude range
+    lat_values = np.linspace(-30.66, -29.58, n_rows)  # Latitudes from 30.66°S to 29.58°S
+    lon_values = np.linspace(27.0, 29.0, n_cols)      # Longitudes from 27.0°E to 29.0°E
+
+    # Convert to xarray DataArrays for easier handling
+    historical_precip_da = xr.DataArray(historical_precip, coords=[historical_dates, lat_values, lon_values], dims=["time", "lat", "lon"], name='precipitation')
+    forecast_precip_da = xr.DataArray(forecast_precip, coords=[np.arange(n_ensembles), forecast_dates, lat_values, lon_values], dims=["ensemble", "time", "lat", "lon"], name='precipitation')
+    
+    return historical_precip_da, forecast_precip_da
+
+
+
+
 def generate_synthetic_data():
     # Seed for reproducibility
     np.random.seed(0)
@@ -343,7 +375,8 @@ def main():
  #            forecast_precip_da = forecast_data['precipitation']
 # Step 1: enerate Synthetic Data
     if st.button('Generate Synthetic Data'):
-        historical_data, forecast_data = generate_synthetic_data()
+        #historical_data, forecast_data = generate_synthetic_data()
+        historical_data, forecast_data = generate_synthetic_data_lesotho()
         st.session_state['historical_data'] = historical_data
         st.session_state['forecast_data'] = forecast_data
         st.success("Synthetic data generated successfully.")
