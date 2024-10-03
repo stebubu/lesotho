@@ -435,7 +435,28 @@ def main():
         # Reverse the y-axis (latitude) to display negative values on the bottom
         #fig.update_yaxes(autorange="reversed")
  
-        fig.update_traces(hoverinfo='x+y+z', showscale=True)
+        #fig.update_traces(hoverinfo='x+y+z', showscale=True)
+        # Add country borders as a new trace
+        fig.add_trace(go.Scattergeo(
+            locationmode='ISO-3',  # Use ISO-3 country codes for border overlay
+            lon=world['geometry'].apply(lambda x: x.centroid.x),
+            lat=world['geometry'].apply(lambda x: x.centroid.y),
+            mode='lines',
+            line=dict(width=1, color='black'),
+            showlegend=False
+        ))
+        
+        # Update figure layout to include map details (optional)
+        fig.update_layout(
+            geo=dict(
+                showcoastlines=True,
+                showcountries=True,
+                countrycolor="black",
+                coastlinecolor="gray",
+            )
+        )
+
+        
         st.plotly_chart(fig, use_container_width=True)            
         
         # Plotting lower tercilet with custom color scale
