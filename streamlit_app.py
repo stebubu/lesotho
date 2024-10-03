@@ -38,6 +38,7 @@ def plot_selected_ensemble(selected_ensemble, lon, lat):
 
     # Add coastlines for reference
     ax.coastlines(color='black')
+    ax.add_feature(cfeature.BORDERS, linestyle=':', edgecolor='black')  # Add country borders
 
     # Set the map extent to focus on the Lesotho region (approximately 27°E to 29°E and 29.5°S to 30.7°S)
     ax.set_extent([27, 29, -30.7, -29.5], crs=ccrs.PlateCarree())
