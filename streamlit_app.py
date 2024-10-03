@@ -16,7 +16,7 @@ from climate_eed import fetch_var_planetary
 
 
 # Load country borders using GeoPandas
-world = gpd.read_file(gpd.datasets.get_path('naturalearth_lowres'))
+#world = gpd.read_file(gpd.datasets.get_path('naturalearth_lowres'))
 
 
 
@@ -437,9 +437,9 @@ def main():
         # Reverse the y-axis (latitude) to display negative values on the bottom
         #fig.update_yaxes(autorange="reversed")
  
-        #fig.update_traces(hoverinfo='x+y+z', showscale=True)
+        fig.update_traces(hoverinfo='x+y+z', showscale=True)
         # Add country borders as a new trace
-        fig.add_trace(go.Scattergeo(
+        '''fig.add_trace(go.Scattergeo(
             locationmode='ISO-3',  # Use ISO-3 country codes for border overlay
             lon=world['geometry'].apply(lambda x: x.centroid.x),
             lat=world['geometry'].apply(lambda x: x.centroid.y),
@@ -456,7 +456,7 @@ def main():
                 countrycolor="black",
                 coastlinecolor="gray",
             )
-        )
+        )'''
 
         
         st.plotly_chart(fig, use_container_width=True)            
