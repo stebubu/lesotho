@@ -12,4 +12,4 @@ folium
 streamlit-folium
 git+https://github.com/SaferPlaces2023/climate_eed
 cartopy
-altair
+altair>=4.0.0
