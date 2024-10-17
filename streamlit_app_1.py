@@ -101,6 +101,23 @@ def main():
         fig = px.imshow(selected_ensemble_data[0], labels={'color': 'Precipitation'}, aspect='auto')
         st.plotly_chart(fig)
 
+
+        # Step 6: Button to Generate Past Forecast with 50 Members
+        if st.button("Generate Past Forecast with 50 Members"):
+            past_forecast = forecast_precip.sel(ensemble=slice(0, 49))  # Assuming 50 ensemble members
+            st.success("Past forecast with 50 members generated.")
+
+        # Step 7: Quantile Bias Correction
+        st.header("Quantile Bias Correction")
+        bias_corrector = BiasCorrection(method='quantile_mapping')
+        bias_corrected_data = bias_corrector.fit_transform(historical_precip, forecast_precip)
+
+        # Plot bias correction factors
+        st.header("Bias Correction Factors")
+        fig = px.imshow(bias_corrector.bias_correction_factors.mean(dim='time'), labels={'color': 'Bias Correction Factor'}, aspect='auto')
+        st.plotly_chart(fig)
+
+
         # Add more plots as needed...
 
 
